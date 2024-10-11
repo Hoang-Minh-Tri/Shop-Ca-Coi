@@ -1,6 +1,7 @@
 package vn.MinhTri.ShopFizz.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,12 @@ public class UserService {
 
     public List<User> GetAllUser() {
         return this.userRepository.findAll();
+    }
+
+    public User GetUserById(long id) {
+        Optional<User> user = this.userRepository.findById(id);
+        if (user.isPresent())
+            return user.get();
+        return null;
     }
 }

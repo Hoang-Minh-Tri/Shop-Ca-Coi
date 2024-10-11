@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.services.UserService;
@@ -32,6 +33,13 @@ public class UserController {
         List<User> users = this.userService.GetAllUser();
         model.addAttribute("users", users);
         return "/admin/user/table-user";
+    }
+
+    @GetMapping("/admin/user/{id}")
+    public String getUserDetail(@PathVariable("id") long id, Model model) {
+        User user = this.userService.GetUserById(id);
+        model.addAttribute("user", user);
+        return "/admin/user/show";
     }
 
     @GetMapping("/admin/user/create")
