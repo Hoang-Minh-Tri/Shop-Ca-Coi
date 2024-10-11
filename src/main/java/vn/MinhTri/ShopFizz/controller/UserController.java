@@ -54,4 +54,24 @@ public class UserController {
         return "redirect:/admin/user";
     }
 
+    @GetMapping("/admin/user/update/{id}")
+    public String getUpdatePage(Model model, @PathVariable("id") long id) {
+        User user = this.userService.GetUserById(id);
+        model.addAttribute("user1", user);
+        return "/admin/user/update";
+    }
+
+    @PostMapping("/admin/user/update")
+    public String postUpdateUser(@ModelAttribute("user1") User user) {
+        User newUser = this.userService.GetUserById(user.getId());
+        if (newUser != null) {
+            newUser.setAddress(user.getAddress());
+            newUser.setEmail(user.getEmail());
+            newUser.setFullName(user.getFullName());
+            newUser.setPhone(user.getPhone());
+            this.userService.HanleSaveUser(newUser);
+        }
+        return "redirect:/admin/user";
+    }
+
 }
