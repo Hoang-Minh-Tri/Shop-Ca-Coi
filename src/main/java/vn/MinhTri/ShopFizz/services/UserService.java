@@ -1,5 +1,7 @@
 package vn.MinhTri.ShopFizz.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import vn.MinhTri.ShopFizz.domain.User;
@@ -13,7 +15,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void SaveUser(User user) {
+    public void HanleSaveUser(User user) {
         this.userRepository.save(user);
+    }
+
+    public List<User> GetAllUser() {
+        return this.userRepository.findAll();
     }
 }

@@ -1,5 +1,7 @@
 package vn.MinhTri.ShopFizz.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,13 @@ public class UserController {
     }
 
     @GetMapping("/admin/user")
+    public String getAllUser(Model model) {
+        List<User> users = this.userService.GetAllUser();
+        model.addAttribute("users", users);
+        return "/admin/user/table-user";
+    }
+
+    @GetMapping("/admin/user/create")
     public String getMethodName(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
@@ -33,8 +42,8 @@ public class UserController {
 
     @PostMapping("/admin/user/create1")
     public String postCreateUser(@ModelAttribute("newUser") User user) {
-        this.userService.SaveUser(user);
-        return "redirect:/";
+        this.userService.HanleSaveUser(user);
+        return "redirect:/admin/user";
     }
 
 }
