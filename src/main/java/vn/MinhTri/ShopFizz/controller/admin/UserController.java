@@ -1,4 +1,4 @@
-package vn.MinhTri.ShopFizz.controller;
+package vn.MinhTri.ShopFizz.controller.admin;
 
 import java.util.List;
 
@@ -32,14 +32,14 @@ public class UserController {
     public String getAllUser(Model model) {
         List<User> users = this.userService.GetAllUser();
         model.addAttribute("users", users);
-        return "/admin/user/table-user";
+        return "/admin/user/show";
     }
 
     @GetMapping("/admin/user/{id}")
     public String getUserDetail(@PathVariable("id") long id, Model model) {
         User user = this.userService.GetUserById(id);
         model.addAttribute("user", user);
-        return "/admin/user/show";
+        return "/admin/user/detail";
     }
 
     @GetMapping("/admin/user/create")
@@ -48,7 +48,7 @@ public class UserController {
         return "admin/user/create";
     }
 
-    @PostMapping("/admin/user/create1")
+    @PostMapping("/admin/user/create")
     public String postCreateUser(@ModelAttribute("newUser") User user) {
         this.userService.HanleSaveUser(user);
         return "redirect:/admin/user";
@@ -57,12 +57,12 @@ public class UserController {
     @GetMapping("/admin/user/update/{id}")
     public String getUpdatePage(Model model, @PathVariable("id") long id) {
         User user = this.userService.GetUserById(id);
-        model.addAttribute("user1", user);
+        model.addAttribute("newUser", user);
         return "/admin/user/update";
     }
 
     @PostMapping("/admin/user/update")
-    public String postUpdateUser(@ModelAttribute("user1") User user) {
+    public String postUpdateUser(@ModelAttribute("newUser") User user) {
         User newUser = this.userService.GetUserById(user.getId());
         if (newUser != null) {
             newUser.setAddress(user.getAddress());
