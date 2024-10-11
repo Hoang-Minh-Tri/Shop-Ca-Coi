@@ -30,4 +30,8 @@ public class UserService {
             return user.get();
         return null;
     }
+
+    public void DeleteAUser(User user) {
+        this.userRepository.delete(user);
+    }
 }
