@@ -4,23 +4,22 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import vn.MinhTri.ShopFizz.domain.User;
+import vn.MinhTri.ShopFizz.services.UploadService;
 import vn.MinhTri.ShopFizz.services.UserService;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class UserController {
 
     private final UserService userService;
+    private final UploadService uploadService;
 
-    UserController(UserService userService) {
+    public UserController(UserService userService, UploadService uploadService) {
         this.userService = userService;
+        this.uploadService = uploadService;
     }
 
     @GetMapping("/")
@@ -49,9 +48,12 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/create")
-    public String postCreateUser(@ModelAttribute("newUser") User user) {
-        this.userService.HanleSaveUser(user);
+    public String postCreateUser(@ModelAttribute("newUser") User user,
+            @RequestParam("MinhTriFile") MultipartFile file) {
+        this.uploadService.handleSaveUpLoadFile(file, "avatar");
+        // this.userService.handleSaveUser(user);
         return "redirect:/admin/user";
+
     }
 
     @GetMapping("/admin/user/update/{id}")
