@@ -7,8 +7,8 @@
             <meta charset="utf-8" />
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-            <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
-            <meta name="author" content="Hỏi Dân IT" />
+            <meta name="description" content="MT" />
+            <meta name="author" content="MT" />
             <title>Dashboard</title>
             <link href="/css/styles.css" rel="stylesheet" />
             <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -41,6 +41,7 @@
                                                     <th>ID</th>
                                                     <th>Email</th>
                                                     <th>Full Name</th>
+                                                    <th>Role</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -51,6 +52,7 @@
                                                         <th>${user.id}</th>
                                                         <td>${user.email}</td>
                                                         <td>${user.fullName}</td>
+                                                        <td>${user.role.name}</td>
                                                         <td>
                                                             <a href="/admin/user/${user.id}"
                                                                 class="btn btn-success">View</a>

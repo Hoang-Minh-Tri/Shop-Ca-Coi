@@ -8,12 +8,32 @@
                 <meta charset="utf-8" />
                 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-                <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
-                <meta name="author" content="Hỏi Dân IT" />
+                <meta name="description" content="MT" />
+                <meta name="author" content="MT" />
                 <title>Update User</title>
                 <link href="/css/styles.css" rel="stylesheet" />
 
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        const defaultImagePath = '/images/avatar/1728773736521-download (2).jpg';
+                        $("#avatarPreview").attr("src", defaultImagePath);
+                        $("#avatarPreview").css({ "display": "block" });
+                        $("#avatarFile").change(function (e) {
+                            const file = e.target.files[0];
+                            if (file) {
+                                const imgURL = URL.createObjectURL(file);
+                                $("#avatarPreview").attr("src", imgURL);
+                                $("#avatarPreview").css({ "display": "block" });
+                            }
+                        });
+                    });
+                </script>
+
+
             </head>
 
             <body class="sb-nav-fixed">
@@ -58,11 +78,21 @@
                                                     <label class="form-label">Address:</label>
                                                     <form:input type="text" class="form-control" path="address" />
                                                 </div>
+                                                <div class="mb-3 col-12 col-md-6">
+                                                    <label for="avatarFile" class="form-label">Avatar:</label>
+                                                    <input class="form-control" type="file" id="avatarFile"
+                                                        accept=".png, .jpg, .jpeg" name="MinhTriFile" />
+                                                </div>
+                                                <div class="col-12 mb-3">
+
+
+                                                    <img style="max-height: 250px; display: none;" alt="avatar preview"
+                                                        id="avatarPreview" />
+                                                </div>
 
                                                 <button type="submit" class="btn btn-warning">Update</button>
                                             </form:form>
                                         </div>
-
                                     </div>
 
                                 </div>

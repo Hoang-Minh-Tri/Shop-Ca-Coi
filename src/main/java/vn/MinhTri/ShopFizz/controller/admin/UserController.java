@@ -2,6 +2,8 @@ package vn.MinhTri.ShopFizz.controller.admin;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +18,13 @@ public class UserController {
 
     private final UserService userService;
     private final UploadService uploadService;
+    private PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UploadService uploadService) {
+    public UserController(UserService userService, UploadService uploadService,
+            PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
-    }
-
-    @GetMapping("/")
-    public String getHomePage() {
-        return "hello";
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/admin/user")
@@ -50,8 +50,12 @@ public class UserController {
     @PostMapping("/admin/user/create")
     public String postCreateUser(@ModelAttribute("newUser") User user,
             @RequestParam("MinhTriFile") MultipartFile file) {
-        this.uploadService.handleSaveUpLoadFile(file, "avatar");
-        // this.userService.handleSaveUser(user);
+        String avatar = this.uploadService.handleSaveUpLoadFile(file, "avatar");
+        String hashPass = this.passwordEncoder.encode(user.getPassword());
+        user.setAvatar(avatar);
+        user.setPassword(hashPass);
+        user.setRole(this.userService.getRoleByName(user.getRole().getName()));
+        this.userService.HandleSaveUser(user);
         return "redirect:/admin/user";
 
     }
@@ -71,7 +75,7 @@ public class UserController {
             newUser.setEmail(user.getEmail());
             newUser.setFullName(user.getFullName());
             newUser.setPhone(user.getPhone());
-            this.userService.HanleSaveUser(newUser);
+            this.userService.HandleSaveUser(newUser);
         }
         return "redirect:/admin/user";
     }

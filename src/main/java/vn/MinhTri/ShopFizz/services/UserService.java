@@ -5,18 +5,22 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import vn.MinhTri.ShopFizz.domain.Role;
 import vn.MinhTri.ShopFizz.domain.User;
+import vn.MinhTri.ShopFizz.repository.RoleRepository;
 import vn.MinhTri.ShopFizz.repository.UserRepository;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
-    public void HanleSaveUser(User user) {
+    public void HandleSaveUser(User user) {
         this.userRepository.save(user);
     }
 
@@ -33,5 +37,9 @@ public class UserService {
 
     public void DeleteAUser(User user) {
         this.userRepository.delete(user);
+    }
+
+    public Role getRoleByName(String name) {
+        return this.roleRepository.findByName(name);
     }
 }
