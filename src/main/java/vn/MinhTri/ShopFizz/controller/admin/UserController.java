@@ -4,9 +4,12 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.Valid;
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.services.UploadService;
 import vn.MinhTri.ShopFizz.services.UserService;
@@ -46,8 +49,16 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/create")
-    public String postCreateUser(@ModelAttribute("newUser") User user,
+    public String postCreateUser(@ModelAttribute("newUser") @Valid User user,
+            BindingResult bindingResult,
             @RequestParam("MinhTriFile") MultipartFile file) {
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(error.getField() + " - " + error.getDefaultMessage());
+        }
+
+        if (bindingResult.hasErrors())
+            return "/admin/user/create";
         String avatar = this.uploadService.handleSaveUpLoadFile(file, "avatar");
         String hashPass = this.passwordEncoder.encode(user.getPassword());
         user.setAvatar(avatar);

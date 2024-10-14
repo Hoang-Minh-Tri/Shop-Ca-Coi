@@ -2,6 +2,7 @@ package vn.MinhTri.ShopFizz.domain;
 
 import java.util.List;
 import jakarta.annotation.Generated;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +11,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -18,7 +22,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
+
+    @NotEmpty(message = "Không được để password trống")
+    @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 kí tự")
     private String password;
     private String fullName;
     private String address;

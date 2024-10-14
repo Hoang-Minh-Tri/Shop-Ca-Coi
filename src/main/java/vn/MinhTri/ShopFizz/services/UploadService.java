@@ -19,6 +19,8 @@ public class UploadService {
     }
 
     public String handleSaveUpLoadFile(MultipartFile file, String diaChiFile) {
+        if (file.isEmpty())
+            return "";
         String rootPath = this.servletContext.getRealPath("/resources/images");// this.servletContext.getRealPath trả ra
                                                                                // thư mục web app
         String finalNameFile = "";
