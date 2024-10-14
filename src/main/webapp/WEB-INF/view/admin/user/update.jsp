@@ -19,7 +19,7 @@
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                 <script>
                     $(document).ready(function () {
-                        const defaultImagePath = '/images/avatar/1728773736521-download (2).jpg';
+                        const defaultImagePath = '/images/avatar/' + '${newUser.avatar}';
                         $("#avatarPreview").attr("src", defaultImagePath);
                         $("#avatarPreview").css({ "display": "block" });
                         $("#avatarFile").change(function (e) {
