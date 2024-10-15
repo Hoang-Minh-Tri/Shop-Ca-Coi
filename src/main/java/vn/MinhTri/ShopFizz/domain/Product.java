@@ -1,5 +1,6 @@
 package vn.MinhTri.ShopFizz.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "products")
@@ -16,10 +18,13 @@ public class Product {
     private long id;
     @NotEmpty(message = "Không được để trống")
     private String name; // tên
-    @NotEmpty(message = "Không được để trống")
+    @NotNull(message = "Gía không được để trống")
     private double price; // giá
     private String image; // ảnh
+    @NotEmpty(message = "DetailDesc không được để trống")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String detailDesc; // Mô tả chi tiết
+    @NotEmpty(message = "ShortDesc không được để trống")
     private String shortDesc; // Mô ta ngắn
     @Min(value = 1, message = "Số lượng phải lớn hơn 0")
     private long quantity; // Số lượng còn lại

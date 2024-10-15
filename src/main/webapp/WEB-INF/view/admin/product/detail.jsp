@@ -8,9 +8,9 @@
                 <meta charset="utf-8" />
                 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-                <meta name="description" content="MT" />
-                <meta name="author" content="MT" />
-                <title>Detail User</title>
+                <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
+                <meta name="author" content="Hỏi Dân IT" />
+                <title>Detail User - Hỏi Dân IT</title>
                 <link href="/css/styles.css" rel="stylesheet" />
 
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -23,37 +23,35 @@
                     <div id="layoutSidenav_content">
                         <main>
                             <div class="container-fluid px-4">
-                                <h1 class="mt-4">Manage Users</h1>
+                                <h1 class="mt-4">Products</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Users</li>
+                                    <li class="breadcrumb-item"><a href="/admin/product">Product</a></li>
+                                    <li class="breadcrumb-item active">View detail</li>
                                 </ol>
                                 <div class="container mt-5">
                                     <div class="row">
                                         <div class="col-12 mx-auto">
                                             <div class="d-flex justify-content-between">
-                                                <h3>User detail with id = ${id}</h3>
+                                                <h3>Product detail with id = ${id}</h3>
                                             </div>
 
                                             <hr />
 
                                             <div class="card" style="width: 60%">
+                                                <img class="card-img-top" src="/images/product/${product.image}"
+                                                    alt="Card image cap">
+
                                                 <div class="card-header">
-                                                    User information
+                                                    Product information
                                                 </div>
                                                 <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item">ID: ${user.id}</li>
-                                                    <li class="list-group-item">Email: ${user.email}</li>
-                                                    <li class="list-group-item">FullName: ${user.fullName}</li>
-                                                    <li class="list-group-item">Address: ${user.address}</li>
-                                                    <li class="list-group-item">
-                                                        Image:
-                                                        <img src="/images/avatar/${user.avatar}" alt="Chưa có ảnh"
-                                                            style="max-height: 250px;">
-                                                    </li>
+                                                    <li class="list-group-item">ID: ${product.id}</li>
+                                                    <li class="list-group-item">Name: ${product.name}</li>
+                                                    <li class="list-group-item">Price: ${product.price}</li>
                                                 </ul>
                                             </div>
-                                            <a href="/admin/user" class="btn btn-success mt-3">Back</a>
+                                            <a href="/admin/product" class="btn btn-success mt-3">Back</a>
 
                                         </div>
 

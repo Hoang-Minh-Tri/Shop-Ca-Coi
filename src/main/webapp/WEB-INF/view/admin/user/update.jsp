@@ -19,10 +19,14 @@
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                 <script>
                     $(document).ready(function () {
-                        const defaultImagePath = '/images/avatar/' + '${newUser.avatar}';
-                        $("#avatarPreview").attr("src", defaultImagePath);
-                        $("#avatarPreview").css({ "display": "block" });
-                        $("#avatarFile").change(function (e) {
+                        const avatarFile = $("#avatarFile")
+                        const tmp = "${newUser.avatar}";
+                        if (tmp) {
+                            const defaultImagePath = "/images/avatar/" + tmp;
+                            $("#avatarPreview").attr("src", defaultImagePath);
+                            $("#avatarPreview").css({ "display": "block" });
+                        }
+                        avatarFile.change(function (e) {
                             const file = e.target.files[0];
                             if (file) {
                                 const imgURL = URL.createObjectURL(file);

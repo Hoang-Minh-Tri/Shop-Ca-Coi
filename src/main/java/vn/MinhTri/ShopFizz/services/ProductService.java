@@ -20,4 +20,17 @@ public class ProductService {
         List<Product> products = this.productRepository.findAll();
         return products;
     }
+
+    public void HandleSaveProduct(Product product) {
+        this.productRepository.save(product);
+    }
+
+    public Optional<Product> fetchProductById(long id) {
+        return this.productRepository.findById(id);
+    }
+
+    public void deleteProduct(long id) {
+        this.productRepository.deleteById(id);
+    }
+
 }

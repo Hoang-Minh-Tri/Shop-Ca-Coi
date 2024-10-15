@@ -52,7 +52,6 @@
                                                         <td>${product.name}</td>
                                                         <td>${product.price}</td>
                                                         <td>${product.factory}</td>
-                                                        <td>${product.action}</td>
                                                         <td>
                                                             <a href="/admin/product/${product.id}"
                                                                 class="btn btn-success">View</a>
