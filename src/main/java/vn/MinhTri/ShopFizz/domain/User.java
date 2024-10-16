@@ -10,9 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -25,6 +25,8 @@ public class User {
 
     @NotEmpty(message = "Email cannot be empty")
     private String email;
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
 
     @NotEmpty(message = "Không được để password trống")
     @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 kí tự")
@@ -39,7 +41,7 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    List<Order> order;
+    private List<Order> order;
 
     public Role getRole() {
         return role;
@@ -119,5 +121,13 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.MinhTri.ShopFizz.domain.Product;
 import vn.MinhTri.ShopFizz.services.ProductService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ItemController {
@@ -22,6 +27,15 @@ public class ItemController {
         model.addAttribute("product", pr);
         model.addAttribute("id", id);
         return "client/product/detail";
+    }
+
+    @PostMapping("/addProductToCart/{id}")
+    public String postMethodName(@PathVariable("id") long id, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String email = (String) session.getAttribute("email");
+        long productId = id;
+        this.productService.HandleSaveProductToCart(email, productId);
+        return "redirect:/";
     }
 
 }

@@ -70,10 +70,11 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement((sessionManagement) -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .invalidSessionUrl("/logout?expired")
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false))
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)// chưa có session thì tạo session mới
+                        .invalidSessionUrl("/logout?expired")// hết hạn session thì logout
+                        .maximumSessions(1)// số lượng thiết bị có thể đăng nhập cùng lúc
+                        .maxSessionsPreventsLogin(false))// fasle: người sau đá người trước, true thì người sau phải đợi
+                                                         // người trước hết hạn
                 .logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
                 .rememberMe((rememberMe) -> rememberMe.rememberMeServices(rememberMeServices()))
                 .formLogin(formLogin -> formLogin
