@@ -16,10 +16,8 @@ import vn.MinhTri.ShopFizz.services.UserService;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomePageController {
@@ -67,6 +65,12 @@ public class HomePageController {
     @GetMapping("/login")
     public String getLoginPage() {
         return "client/auth/login";
+    }
+
+    // Trang thông báo lỗi
+    @GetMapping("/access")
+    public String getaccessPay() {
+        return "client/auth/deny";
     }
 
 }

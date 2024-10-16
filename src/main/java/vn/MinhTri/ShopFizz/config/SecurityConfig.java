@@ -2,15 +2,14 @@ package vn.MinhTri.ShopFizz.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import jakarta.servlet.DispatcherType;
 import vn.MinhTri.ShopFizz.services.CustomUserDetailsService;
@@ -22,6 +21,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomSuccess();
     }
 
     // Dùng CustomUserDetailService để ghi đè lại UserDetailsService của spring
@@ -49,14 +53,18 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, // Cho phép truy cập tới view
                                 DispatcherType.INCLUDE) // chặn các include
                         .permitAll()
-                        .requestMatchers("/", "/login", "/client/**", "/css/**", "/js/**",
+                        .requestMatchers("/", "/login", "product/**", "/client/**", "/css/**", "/js/**",
                                 "/images/**")
                         .permitAll()
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureUrl("/login?error")// login faile thì trả về đường link này
-                        .permitAll());
+                        .successHandler(authenticationSuccessHandler())
+                        .permitAll())
+                .exceptionHandling(ex -> ex.accessDeniedPage("/access"));// Nếu truy câp không đúng quyền hạn
         return http.build();
     }
 }

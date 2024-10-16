@@ -32,14 +32,14 @@ public class UserController {
     public String getAllUser(Model model) {
         List<User> users = this.userService.GetAllUser();
         model.addAttribute("users", users);
-        return "/admin/user/show";
+        return "admin/user/show";
     }
 
     @GetMapping("/admin/user/{id}")
     public String getUserDetail(@PathVariable("id") long id, Model model) {
         User user = this.userService.GetUserById(id);
         model.addAttribute("user", user);
-        return "/admin/user/detail";
+        return "admin/user/detail";
     }
 
     @GetMapping("/admin/user/create")
@@ -73,7 +73,7 @@ public class UserController {
     public String getUpdatePage(Model model, @PathVariable("id") long id) {
         User user = this.userService.GetUserById(id);
         model.addAttribute("newUser", user);
-        return "/admin/user/update";
+        return "admin/user/update";
     }
 
     @PostMapping("/admin/user/update")
