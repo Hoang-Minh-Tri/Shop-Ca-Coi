@@ -9,4 +9,8 @@ import vn.MinhTri.ShopFizz.domain.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
+
+    boolean existsByEmail(String email);
+
+    User findByEmail(String email);
 }

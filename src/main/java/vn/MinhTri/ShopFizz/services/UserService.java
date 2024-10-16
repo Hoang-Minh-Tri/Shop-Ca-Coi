@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import vn.MinhTri.ShopFizz.domain.Role;
 import vn.MinhTri.ShopFizz.domain.User;
+import vn.MinhTri.ShopFizz.domain.dto.DtoRegister;
 import vn.MinhTri.ShopFizz.repository.RoleRepository;
 import vn.MinhTri.ShopFizz.repository.UserRepository;
 
@@ -41,5 +42,21 @@ public class UserService {
 
     public Role getRoleByName(String name) {
         return this.roleRepository.findByName(name);
+    }
+
+    public User registerDtoToUser(DtoRegister dtoRegister) {
+        User user = new User();
+        user.setFullName(dtoRegister.getFirstName() + " " + dtoRegister.getLastName());
+        user.setEmail(dtoRegister.getEmail());
+        user.setPassword(dtoRegister.getPassword());
+        return user;
+    }
+
+    public boolean CheckEmailExits(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public User getUserByEmail(String email) {
+        return this.userRepository.findByEmail(email);
     }
 }
