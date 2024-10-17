@@ -8,15 +8,22 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import vn.MinhTri.ShopFizz.domain.Cart;
+import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Product;
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.domain.dto.DtoRegister;
+import vn.MinhTri.ShopFizz.repository.CartDetailsRepository;
+import vn.MinhTri.ShopFizz.repository.CartRepository;
 import vn.MinhTri.ShopFizz.services.ProductService;
 import vn.MinhTri.ShopFizz.services.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -24,11 +31,16 @@ public class HomePageController {
     private final ProductService productService;
     private final UserService userService;
     private PasswordEncoder passwordEncoder;
+    private CartRepository cartRepository;
+    private CartDetailsRepository cartDetailsRepository;
 
-    public HomePageController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder) {
+    public HomePageController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder,
+            CartRepository cartRepository, CartDetailsRepository cartDetailsRepository) {
         this.productService = productService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.cartRepository = cartRepository;
+        this.cartDetailsRepository = cartDetailsRepository;
     }
 
     @GetMapping("/")
@@ -71,6 +83,25 @@ public class HomePageController {
     @GetMapping("/access")
     public String getaccessPay() {
         return "client/auth/deny";
+    }
+
+    @GetMapping("/cart")
+    public String getCartPage(Model model, HttpServletRequest request) {
+        User currentUser = new User();
+        HttpSession session = request.getSession(false);
+        long id = (long) session.getAttribute("id");
+        currentUser.setId(id);
+        Cart cart = this.productService.GetByUser(currentUser);
+        List<CartDetail> cartDetails = cart == null ? new ArrayList<CartDetail>() : cart.getCartDetails();
+        double totalPrice = 0;
+        for (CartDetail cd : cartDetails) {
+            totalPrice += cd.getPrice() * cd.getQuantity();
+        }
+        model.addAttribute("cartDetails", cartDetails);
+        model.addAttribute("totalPrice", totalPrice);
+
+        model.addAttribute("cart", cart);
+        return "client/cart/show";
     }
 
 }

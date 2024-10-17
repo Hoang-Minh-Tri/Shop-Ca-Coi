@@ -7,13 +7,12 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.2</version>
 		<relativePath/>
-		<!-- lookup parent from repository -->
 	</parent>
-	<groupId>vn.hoidanit</groupId>
-	<artifactId>laptopshop</artifactId>
+	<groupId>vn.MinhTri</groupId>
+	<artifactId>ShopFizz</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>laptopshop</name>
-	<description>Demo project for Spring Boot</description>
+	<name>ShopFizz</name>
+	<description>Demo </description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

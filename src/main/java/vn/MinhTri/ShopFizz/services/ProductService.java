@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import vn.MinhTri.ShopFizz.domain.Cart;
 import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Product;
@@ -45,29 +46,74 @@ public class ProductService {
         this.productRepository.deleteById(id);
     }
 
-    public void HandleSaveProductToCart(String email, long productId) {
+    public void HandleSaveProductToCart(String email, long productId, HttpSession session) {
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
             Cart cart = this.cartRepository.findByUser(user);
             if (cart == null) {
                 Cart newCart = new Cart();
                 newCart.setUser(user);
-                newCart.setSum(1);
+                newCart.setSum(0);
                 cart = this.cartRepository.save(newCart);
             }
             Optional<Product> product = this.productRepository.findById(productId);
             if (product.isPresent()) {
                 Product productNew = product.get();
+                CartDetail cartDetailOld = this.cartDetailsRepository.findByCartAndProduct(cart, productNew);
+                if (cartDetailOld == null) {
+                    CartDetail cartDetail = new CartDetail();
+                    cartDetail.setCart(cart);
+                    cartDetail.setProduct(productNew);
+                    cartDetail.setPrice(productNew.getPrice());
+                    cartDetail.setQuantity(1);
+                    this.cartDetailsRepository.save(cartDetail);
+                    int sum = cart.getSum() + 1;
+                    cart.setSum(cart.getSum() + 1);
 
-                CartDetail cartDetail = new CartDetail();
-                cartDetail.setCart(cart);
-                cartDetail.setProduct(productNew);
-                cartDetail.setPrice(productNew.getPrice());
-                cartDetail.setQuantity(1);
+                    session.setAttribute("sum", sum);
+                    this.cartRepository.save(cart);
 
-                this.cartDetailsRepository.save(cartDetail);
+                } else {
+
+                    cartDetailOld.setQuantity(cartDetailOld.getQuantity() + 1);
+                    this.cartDetailsRepository.save(cartDetailOld);
+                }
+
             }
 
         }
     }
+
+    public void HanhleRemoveCartDetail(long productId, HttpSession session) {
+        Optional<CartDetail> cartDetailOpp = this.cartDetailsRepository.findById(productId);
+        if (cartDetailOpp.isPresent()) {
+            CartDetail cartDetail = cartDetailOpp.get();
+            Cart cart = cartDetail.getCart();
+            this.cartDetailsRepository.delete(cartDetail);
+            if (cart.getSum() > 1) {
+                cart.setSum(cart.getSum() - 1);
+                session.setAttribute("sum", cart.getSum());
+                this.cartRepository.save(cart);
+            } else {
+                this.cartRepository.delete(cart);
+                session.setAttribute("sum", 0);
+            }
+        }
+    }
+
+    public Cart GetByUser(User user) {
+        return this.cartRepository.findByUser(user);
+    }
+
+    public void handleUpdateCartBeforeCheckout(List<CartDetail> cartDetails) {
+        for (CartDetail cartDetail : cartDetails) {
+            Optional<CartDetail> cdOptional = this.cartDetailsRepository.findById(cartDetail.getId());
+            if (cdOptional.isPresent()) {
+                CartDetail currentCartDetail = cdOptional.get();
+                currentCartDetail.setQuantity(cartDetail.getQuantity());
+                this.cartDetailsRepository.save(currentCartDetail);
+            }
+        }
+    }
+
 }
