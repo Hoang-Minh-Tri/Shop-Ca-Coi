@@ -129,19 +129,24 @@ public class ProductService {
     public void PlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress,
             String receiverPhone) {
 
-        // Lưu order
-        Order order = new Order();
-        order.setUser(user);
-        order.setReceiverAddress(receiverAddress);
-        order.setReceiverName(receiverName);
-        order.setReceiverPhone(receiverPhone);
-        order = this.orderRepository.save(order);
-
         Cart cart = this.cartRepository.findByUser(user);
         List<CartDetail> cartDetails;
         if (cart != null) {
             cartDetails = cart.getCartDetails();
             if (cartDetails != null) {
+                // Lưu order
+                Order order = new Order();
+                order.setUser(user);
+                order.setReceiverAddress(receiverAddress);
+                order.setReceiverName(receiverName);
+                order.setReceiverPhone(receiverPhone);
+                order.setStatus("Chờ xử lý");
+                long sum = 0;
+                for (CartDetail cd : cartDetails) {
+                    sum += (cd.getQuantity() * cd.getPrice());
+                }
+                order.setTotalPrice(sum);
+                order = this.orderRepository.save(order);
                 for (CartDetail cd : cartDetails) {
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setOrder(order);

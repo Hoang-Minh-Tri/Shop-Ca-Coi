@@ -26,6 +26,12 @@ public class Order {
     private String receiverPhone;
 
     private String status;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "order")
+    List<OrderDetail> orderDetails;
 
     // user id
 
@@ -68,13 +74,6 @@ public class Order {
     public void setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "order")
-    List<OrderDetail> orderDetails;
 
     public long getId() {
         return id;

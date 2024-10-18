@@ -93,7 +93,7 @@ public class ItemController {
         long id = (long) session.getAttribute("id");
         user.setId(id);
         this.productService.PlaceOrder(user, session, receiverName, receiverAddress, receiverPhone);
-        return "redirect:/";
+        return "client/cart/Ordersuccess";
     }
 
 }
