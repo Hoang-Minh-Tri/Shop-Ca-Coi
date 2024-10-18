@@ -39,16 +39,16 @@
 
                 <body>
 
-                    <!-- Spinner Start -->
+                    <!-- Spinner-->
                     <div id="spinner"
                         class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
                         <div class="spinner-grow text-primary" role="status"></div>
                     </div>
-                    <!-- Spinner End -->
+                    <!-- Spinner-->
 
                     <jsp:include page="../layout/header.jsp" />
 
-                    <!-- Cart Page Start -->
+                    <!-- Cart-->
                     <div class="container-fluid py-5">
                         <div class="container py-5">
                             <div class="mb-3">
@@ -205,12 +205,13 @@
                             </c:if>
                         </div>
                     </div>
+                    <!-- Cart-->
 
 
                     <jsp:include page="../layout/footer.jsp" />
 
 
-                    <!-- TTrở lại đầu file -->
+                    <!-- Trở về Top-->
                     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
                             class="fa fa-arrow-up"></i></a>
 

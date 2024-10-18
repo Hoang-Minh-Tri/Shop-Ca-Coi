@@ -129,15 +129,12 @@
         })
     });
 
-
-
-
     $('.quantity button').on('click', function () {
         let change = 0;
 
         var button = $(this);
-        var oldValue = button.parent().parent().find('input').val(); //trả ra cha 2 lần và tìm thẻ input là cong của ông cha đó lấy giá trị 
-        if (button.hasClass('btn-plus')) {// nếu trong thẻ button vừa bấm đó có class btn-plus
+        var oldValue = button.parent().parent().find('input').val();
+        if (button.hasClass('btn-plus')) {
             var newVal = parseFloat(oldValue) + 1;
             change = 1;
         } else {
@@ -148,17 +145,24 @@
                 newVal = 1;
             }
         }
-        const input = button.parent().parent().find('input');//lấy lại thẻ input
-        input.val(newVal);//cập nhật lại giá trị
-        const price = input.attr("data-cart-detail-price");//lấy giá trị biến data-price
+        const input = button.parent().parent().find('input');
+        input.val(newVal);
+        const index = input.attr("data-cart-detail-index")
+        const el = document.getElementById(`cartDetails${index}.quantity`);
+        $(el).val(newVal);
+
+        const price = input.attr("data-cart-detail-price");
         const id = input.attr("data-cart-detail-id");
 
-        const priceElement = $(`p[data-cart-detail-id='${id}']`);// tìm thẻ p có giá trị là id
+        const priceElement = $(`p[data-cart-detail-id='${id}']`);
         if (priceElement) {
             const newPrice = +price * newVal;
             priceElement.text(formatCurrency(newPrice.toFixed(2)) + " đ");
         }
+
+
         const totalPriceElement = $(`p[data-cart-total-price]`);
+
         if (totalPriceElement && totalPriceElement.length) {
             const currentTotal = totalPriceElement.first().attr("data-cart-total-price");
             let newTotal = +currentTotal;
@@ -167,27 +171,29 @@
             } else {
                 newTotal = change * (+price) + (+currentTotal);
             }
+
+
             change = 0;
+
+            //update
             totalPriceElement?.each(function (index, element) {
-                $(totalPriceElement[index]).text(formatCurrency(newTotal.toFixed(2)) + " đ");//hiển thị giá mới
-                $(totalPriceElement[index]).attr("data-cart-total-price", newTotal);//cập nhật lại biến total
+                $(totalPriceElement[index]).text(formatCurrency(newTotal.toFixed(2)) + " đ");
+                $(totalPriceElement[index]).attr("data-cart-total-price", newTotal);
             });
         }
     });
 
     function formatCurrency(value) {
+
         const formatter = new Intl.NumberFormat('vi-VN', {
             style: 'decimal',
             minimumFractionDigits: 0,
         });
+
         let formatted = formatter.format(value);
         formatted = formatted.replace(/\./g, ',');
         return formatted;
     }
-
-    const index = input.attr("data-cart-detail-index")
-    const el = document.getElementById(`cartDetails${index}.quantity`);
-    $(el).val(newVal);
 
 })(jQuery);
 

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -90,7 +89,10 @@ public class ItemController {
             @RequestParam("receiverAddress") String receiverAddress,
             @RequestParam("receiverPhone") String receiverPhone) {
         HttpSession session = request.getSession(false);
-
+        User user = new User();
+        long id = (long) session.getAttribute("id");
+        user.setId(id);
+        this.productService.PlaceOrder(user, session, receiverName, receiverAddress, receiverPhone);
         return "redirect:/";
     }
 
