@@ -11,8 +11,8 @@
                                 <i class="fas fa-car-side fa-3x text-white"></i>
                             </div>
                             <div class="featurs-content text-center">
-                                <h5>Free Shipping</h5>
-                                <p class="mb-0">Free on order over $300</p>
+                                <h5>Miễn phí vận chuyển</h5>
+                                <p class="mb-0">Vận chuyển đường dài giá 100$</p>
                             </div>
                         </div>
                     </div>
@@ -22,8 +22,8 @@
                                 <i class="fas fa-user-shield fa-3x text-white"></i>
                             </div>
                             <div class="featurs-content text-center">
-                                <h5>Security Payment</h5>
-                                <p class="mb-0">100% security payment</p>
+                                <h5>Bảo mật thông tin</h5>
+                                <p class="mb-0">100% khả năng bảo mật thông tin</p>
                             </div>
                         </div>
                     </div>
@@ -33,8 +33,8 @@
                                 <i class="fas fa-exchange-alt fa-3x text-white"></i>
                             </div>
                             <div class="featurs-content text-center">
-                                <h5>30 Day Return</h5>
-                                <p class="mb-0">30 day money guarantee</p>
+                                <h5>Hoàn trả</h5>
+                                <p class="mb-0">Được hoàn trả trong 30 ngày</p>
                             </div>
                         </div>
                     </div>
@@ -44,8 +44,8 @@
                                 <i class="fa fa-phone-alt fa-3x text-white"></i>
                             </div>
                             <div class="featurs-content text-center">
-                                <h5>24/7 Support</h5>
-                                <p class="mb-0">Support every time fast</p>
+                                <h5>24/7 Hổ trợ</h5>
+                                <p class="mb-0">Hổ trợ mọi lúc</p>
                             </div>
                         </div>
                     </div>

@@ -4,31 +4,31 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Features</div>
+                        <div class="sb-sidenav-menu-heading">Chức năng</div>
                         <a class="nav-link" href="/admin">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Dashboard
+                            Trang chủ
                         </a>
 
-                        <a class="nav-link" href="/admin/user">
+                        <a class="nav-link" href="/admin/user?page=1">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            User
+                            Người dùng
                         </a>
 
-                        <a class="nav-link" href="/admin/product">
+                        <a class="nav-link" href="/admin/product?page=1">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Product
+                            Sản phẩm
                         </a>
 
-                        <a class="nav-link" href="/admin/order">
+                        <a class="nav-link" href="/admin/order?page=1">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Order
+                            Đơn đặt hàng
                         </a>
 
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
+                    <div class="small">Đăng nhập bởi:</div>
                     Minh Tri
                 </div>
             </nav>

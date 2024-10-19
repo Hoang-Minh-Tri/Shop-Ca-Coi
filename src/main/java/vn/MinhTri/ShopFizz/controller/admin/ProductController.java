@@ -3,6 +3,9 @@ package vn.MinhTri.ShopFizz.controller.admin;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,9 +35,14 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String getProduct(Model model) {
-        List<Product> products = this.productService.GetAllProduct();
-        model.addAttribute("products", products);
+    public String getProduct(Model model, @RequestParam("page") int page) {
+
+        Pageable pageable = PageRequest.of(page - 1, 4);
+        Page<Product> products = this.productService.GetAllProductPage(pageable);
+        List<Product> listProducts = products.getContent();
+        model.addAttribute("products", listProducts);
+        model.addAttribute("nowPage", page);
+        model.addAttribute("sumPage", products.getTotalPages());
         return "admin/product/show";
     }
 

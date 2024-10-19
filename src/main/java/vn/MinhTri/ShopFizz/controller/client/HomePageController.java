@@ -1,10 +1,12 @@
 package vn.MinhTri.ShopFizz.controller.client;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -21,6 +23,8 @@ import vn.MinhTri.ShopFizz.services.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -44,8 +48,12 @@ public class HomePageController {
     }
 
     @GetMapping("/")
-    public String getMethodName(Model model) {
-        List<Product> products = this.productService.GetAllProduct();
+    public String getMethodName(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        Pageable pageable = PageRequest.of(page - 1, 8);
+        Page<Product> productPage = this.productService.GetAllProductPage(pageable);
+        List<Product> products = productPage.getContent();
+        model.addAttribute("sumPage", productPage.getTotalPages());
+        model.addAttribute("nowPage", page);
         model.addAttribute("products", products);
         return "client/homepage/show";
     }

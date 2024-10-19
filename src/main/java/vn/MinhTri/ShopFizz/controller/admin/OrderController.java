@@ -1,5 +1,8 @@
 package vn.MinhTri.ShopFizz.controller.admin;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +13,7 @@ import vn.MinhTri.ShopFizz.domain.Order;
 import vn.MinhTri.ShopFizz.domain.OrderDetail;
 import vn.MinhTri.ShopFizz.repository.OrderDetailRepository;
 import vn.MinhTri.ShopFizz.repository.OrderRepository;
+import vn.MinhTri.ShopFizz.services.OrderSevice;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,16 +25,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class OrderController {
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final OrderSevice orderSevice;
 
-    public OrderController(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository) {
+    public OrderController(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
+            OrderSevice orderSevice) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
+        this.orderSevice = orderSevice;
     }
 
     @GetMapping("/admin/order")
-    public String getOrderPage(Model model) {
-        List<Order> orders = this.orderRepository.findAll();
-        model.addAttribute("orders", orders);
+    public String getOrderPage(Model model, @RequestParam("page") int page) {
+        Pageable pageable = PageRequest.of(page - 1, 4);
+        Page<Order> orders = this.orderSevice.GetAllOrderPage(pageable);
+        List<Order> listOrders = orders.getContent();
+        model.addAttribute("nowPage", page);
+        model.addAttribute("sumPage", orders.getTotalPages());
+        model.addAttribute("orders", listOrders);
         return "admin/order/show";
     }
 

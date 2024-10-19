@@ -3,8 +3,9 @@ package vn.MinhTri.ShopFizz.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import vn.MinhTri.ShopFizz.domain.Cart;
@@ -42,6 +43,10 @@ public class ProductService {
     public List<Product> GetAllProduct() {
         List<Product> products = this.productRepository.findAll();
         return products;
+    }
+
+    public Page<Product> GetAllProductPage(Pageable pageable) {
+        return this.productRepository.findAll(pageable);
     }
 
     public void HandleSaveProduct(Product product) {
