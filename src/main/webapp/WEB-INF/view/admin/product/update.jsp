@@ -124,10 +124,10 @@
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Target:</label>
                                                     <form:select class="form-select" path="target">
-                                                        <form:option value="Loại 1">Loại 1</form:option>
-                                                        <form:option value="Loại 2">Loại 2
+                                                        <form:option value="Loai 1">Loại 1</form:option>
+                                                        <form:option value="Loai 2">Loại 2
                                                         </form:option>
-                                                        <form:option value="Loại 3">Loại 3
+                                                        <form:option value="Loai 3">Loại 3
                                                         </form:option>
                                                     </form:select>
                                                 </div>

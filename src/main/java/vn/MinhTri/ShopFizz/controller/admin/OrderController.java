@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class OrderController {
@@ -35,7 +34,7 @@ public class OrderController {
     }
 
     @GetMapping("/admin/order")
-    public String getOrderPage(Model model, @RequestParam("page") int page) {
+    public String getOrderPage(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
         Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Order> orders = this.orderSevice.GetAllOrderPage(pageable);
         List<Order> listOrders = orders.getContent();

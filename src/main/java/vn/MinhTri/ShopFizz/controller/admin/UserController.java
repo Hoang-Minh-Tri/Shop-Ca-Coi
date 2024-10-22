@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/admin/user")
-    public String getAllUser(Model model, @RequestParam("page") int page) {
+    public String getAllUser(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
         Pageable pageable = PageRequest.of(page - 1, 4);
         Page<User> users = this.userService.GetAllUserPage(pageable);
         List<User> listUsers = users.getContent();

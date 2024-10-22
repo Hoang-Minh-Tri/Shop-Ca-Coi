@@ -4,7 +4,7 @@
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
                     <a href="/" class="navbar-brand">
-                        <h1 class="text-primary display-6">Koi Shop Farm</h1>
+                        <h1 class="text-primary display-6">Koi Fish Shop </h1>
                     </a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
@@ -13,7 +13,7 @@
                     <div class="collapse navbar-collapse bg-white justify-content-between mx-5" id="navbarCollapse">
                         <div class="navbar-nav ">
                             <a href="/" class="nav-item nav-link active">Trang Chủ</a>
-                            <a href="/product/2" class="nav-item nav-link">Sản phẩm</a>
+                            <a href="/products" class="nav-item nav-link">Sản phẩm</a>
                         </div>
                         <div class="d-flex m-3 me-0">
                             <button

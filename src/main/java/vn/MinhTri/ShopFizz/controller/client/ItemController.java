@@ -1,5 +1,9 @@
 package vn.MinhTri.ShopFizz.controller.client;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import vn.MinhTri.ShopFizz.domain.Cart;
 import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Product;
+import vn.MinhTri.ShopFizz.domain.Product_;
 import vn.MinhTri.ShopFizz.domain.User;
+import vn.MinhTri.ShopFizz.domain.dto.ProductCrieateDTO;
 import vn.MinhTri.ShopFizz.services.ProductService;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -18,6 +24,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 
 @Controller
@@ -26,6 +33,41 @@ public class ItemController {
 
     public ItemController(ProductService productService) {
         this.productService = productService;
+    }
+
+    @GetMapping("/products")
+    public String GetAllProductPage(Model model, ProductCrieateDTO productCrieateDTO,
+            HttpServletRequest httpServletRequest) {
+        int NumPage = 1;
+        try {
+            if (productCrieateDTO.getPage().isPresent()) {
+                NumPage = Integer.parseInt(productCrieateDTO.getPage().get());
+            } else {
+                // Numpage = 1;
+            }
+        } catch (Exception e) {
+            // Numpage = 1;
+        }
+        Pageable pageable = PageRequest.of(NumPage - 1, 6);
+        if (productCrieateDTO.getSort() != null && productCrieateDTO.getSort().isPresent()) {
+            String sortPrice = productCrieateDTO.getSort().get();
+            if (sortPrice.equals("gia-tang-dan")) {
+                pageable = PageRequest.of(NumPage - 1, 6, Sort.by(Product_.PRICE).ascending());
+            } else if (sortPrice.equals("gia-giam-dan")) {
+                pageable = PageRequest.of(NumPage - 1, 6, Sort.by(Product_.PRICE).descending());
+            }
+        }
+        Page<Product> pageProduct = this.productService.GetAllProductSpec(pageable, productCrieateDTO);
+        List<Product> products = pageProduct.getContent() != null ? pageProduct.getContent() : new ArrayList<Product>();
+        String qs = httpServletRequest.getQueryString();
+        if (qs != null && !qs.isBlank()) {
+            qs = qs.replace("page=" + NumPage, "");
+        }
+        model.addAttribute("products", products);
+        model.addAttribute("sumPage", pageProduct.getTotalPages());
+        model.addAttribute("nowPage", NumPage);
+        model.addAttribute("queryString", qs);
+        return "client/product/show";
     }
 
     @GetMapping("/product/{id}")

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
@@ -14,11 +15,13 @@ import vn.MinhTri.ShopFizz.domain.Order;
 import vn.MinhTri.ShopFizz.domain.OrderDetail;
 import vn.MinhTri.ShopFizz.domain.Product;
 import vn.MinhTri.ShopFizz.domain.User;
+import vn.MinhTri.ShopFizz.domain.dto.ProductCrieateDTO;
 import vn.MinhTri.ShopFizz.repository.CartDetailsRepository;
 import vn.MinhTri.ShopFizz.repository.CartRepository;
 import vn.MinhTri.ShopFizz.repository.OrderDetailRepository;
 import vn.MinhTri.ShopFizz.repository.OrderRepository;
 import vn.MinhTri.ShopFizz.repository.ProductRepository;
+import vn.MinhTri.ShopFizz.services.Specification.ProductSpec;
 
 @Service
 public class ProductService {
@@ -38,6 +41,63 @@ public class ProductService {
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
+    }
+
+    public Specification<Product> checkPrice(List<String> prices) {
+        Specification<Product> spec = Specification.where(null);
+        for (String p : prices) {
+            double min = 0;
+            double max = 0;
+
+            switch (p) {
+                case "duoi-10-trieu":
+                    min = 0;
+                    max = 10000000;
+
+                    break;
+                case "10-15-trieu":
+                    min = 10000000;
+                    max = 15000000;
+                    break;
+
+                case "15-20-trieu":
+                    min = 15000000;
+                    max = 20000000;
+                    break;
+                case "tren-20-trieu":
+                    min = 20000000;
+                    max = 200000000;
+                    break;
+            }
+            if (min != 0 && max != 0) {
+                Specification<Product> specTemp = ProductSpec.PriceMinMax(min, max);
+                spec = spec.or(specTemp);
+            }
+        }
+        return spec;
+    }
+
+    public Page<Product> GetAllProductSpec(Pageable pageable, ProductCrieateDTO productCrieateDTO) {
+
+        if (productCrieateDTO.getFactory() == null && (productCrieateDTO.getTarget() == null
+                && productCrieateDTO.getPrice() != null))
+            return GetAllProductPage(pageable);
+        Specification<Product> spec = Specification.where(null);
+        if (productCrieateDTO.getFactory() != null && productCrieateDTO.getFactory().isPresent()) {
+            Specification<Product> specFactory = ProductSpec.checkFactory(productCrieateDTO.getFactory().get());
+            spec = spec.and(specFactory);
+        }
+        if (productCrieateDTO.getTarget() != null && productCrieateDTO.getTarget().isPresent()) {
+            Specification<Product> specTarget = ProductSpec.checkTaget(productCrieateDTO.getTarget().get());
+            spec = spec.and(specTarget);
+        }
+        if (productCrieateDTO.getPrice() != null && productCrieateDTO.getPrice().isPresent()) {
+            Specification<Product> specPrice = this.checkPrice(productCrieateDTO.getPrice().get());
+            spec = spec.and(specPrice);
+        }
+
+        return this.productRepository.findAll(spec, pageable);
+
     }
 
     public List<Product> GetAllProduct() {
