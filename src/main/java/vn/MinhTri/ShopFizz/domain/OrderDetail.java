@@ -1,6 +1,5 @@
 package vn.MinhTri.ShopFizz.domain;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,8 +19,8 @@ public class OrderDetail {
     private double price;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "productOrderDetail_id")
+    private Poduct_OrderDetail productOrderDetail;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -51,20 +50,20 @@ public class OrderDetail {
         this.price = price;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public Order getOrder() {
         return order;
     }
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Poduct_OrderDetail getProductOrderDetail() {
+        return productOrderDetail;
+    }
+
+    public void setProductOrderDetail(Poduct_OrderDetail productOrderDetail) {
+        this.productOrderDetail = productOrderDetail;
     }
 
 }

@@ -13,5 +13,8 @@ import vn.MinhTri.ShopFizz.domain.Product;
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     Page<Product> findAll(Pageable page);
 
+    Page<Product> findByStatus(String status, Pageable pageable);
+
+    Page<Product> findByStatus(String status, Specification spec, Pageable pageable);
     // Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 }

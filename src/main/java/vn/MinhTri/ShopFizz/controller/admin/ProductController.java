@@ -14,31 +14,38 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Product;
+import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.services.ProductService;
 import vn.MinhTri.ShopFizz.services.UploadService;
+import vn.MinhTri.ShopFizz.services.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
 public class ProductController {
     private final ProductService productService;
     private final UploadService uploadService;
+    private final UserService userService;
 
-    public ProductController(ProductService productService, UploadService uploadService) {
+    public ProductController(ProductService productService, UploadService uploadService, UserService userService) {
         this.productService = productService;
         this.uploadService = uploadService;
+        this.userService = userService;
     }
 
     @GetMapping("/admin/product")
     public String getProduct(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
 
         Pageable pageable = PageRequest.of(page - 1, 4);
-        Page<Product> products = this.productService.GetAllProductPage(pageable);
+        Page<Product> products = this.productService.GetAllProductStatus("Đã duyệt", pageable);
         List<Product> listProducts = products.getContent();
         model.addAttribute("products", listProducts);
         model.addAttribute("nowPage", page);
@@ -55,16 +62,22 @@ public class ProductController {
     @PostMapping("/admin/product/create")
     public String postMethodName(@ModelAttribute("newProduct") @Valid Product product,
             BindingResult bindingResult,
-            @RequestParam("MinhTriFile") MultipartFile file) {
+            @RequestParam("MinhTriFile") MultipartFile file, HttpServletRequest httpServletRequest) {
+        HttpSession httpSession = httpServletRequest.getSession(false);
+        Long id = (Long) httpSession.getAttribute("id");
+        User user = this.userService.GetUserById(id);
         List<FieldError> errors = bindingResult.getFieldErrors();
         for (FieldError error : errors) {
             System.out.println(error.getField() + " - " + error.getDefaultMessage());
         }
 
         if (bindingResult.hasErrors())
-            return "/admin/product/create";
+            return "admin/product/create";
         String avatar = this.uploadService.handleSaveUpLoadFile(file, "product");
         product.setImage(avatar);
+        product.setUser(user);
+        product.setStatus("Đã duyệt");
+        product.setSold(0);
         this.productService.HandleSaveProduct(product);
         return "redirect:/admin/product";
     }
@@ -116,7 +129,12 @@ public class ProductController {
 
     @PostMapping("/admin/product/delete")
     public String postDeleteProduct(Model model, @ModelAttribute("newProduct") Product pr) {
-        this.productService.deleteProduct(pr.getId());
+        List<CartDetail> CartDetails = this.productService.findCartDetailByProduct(pr);
+        if (CartDetails != null) {
+            for (CartDetail cartDetail : CartDetails) {
+                this.productService.RemoveProductWithCartDetail(cartDetail);
+            }
+        }
         return "redirect:/admin/product";
     }
 

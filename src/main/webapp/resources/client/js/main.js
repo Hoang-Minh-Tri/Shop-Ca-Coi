@@ -237,7 +237,7 @@
         const currentUrl = new URL(window.location.href);
         const searchParams = currentUrl.searchParams;
 
-        // Add or update query parameters
+
         searchParams.set('page', '1');
         searchParams.set('sort', sortValue);
 
@@ -254,15 +254,14 @@
             searchParams.set('price', priceArr.join(','));
         }
 
-        // Update the URL and reload the page
+        //update đường link url mới
         window.location.href = currentUrl.toString();
     });
 
-    //handle auto checkbox after page loading
-    // Parse the URL parameters
+
     const params = new URLSearchParams(window.location.search);
 
-    // Set checkboxes for 'factory'
+
     if (params.has('factory')) {
         const factories = params.get('factory').split(',');
         factories.forEach(factory => {
@@ -270,7 +269,7 @@
         });
     }
 
-    // Set checkboxes for 'target'
+
     if (params.has('target')) {
         const targets = params.get('target').split(',');
         targets.forEach(target => {
@@ -278,7 +277,7 @@
         });
     }
 
-    // Set checkboxes for 'price'
+
     if (params.has('price')) {
         const prices = params.get('price').split(',');
         prices.forEach(price => {
@@ -286,7 +285,7 @@
         });
     }
 
-    // Set radio buttons for 'sort'
+
     if (params.has('sort')) {
         const sort = params.get('sort');
         $(`input[type="radio"][name="radio-sort"][value="${sort}"]`).prop('checked', true);

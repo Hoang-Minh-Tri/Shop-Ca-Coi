@@ -81,7 +81,7 @@ public class ProductService {
 
         if (productCrieateDTO.getFactory() == null && (productCrieateDTO.getTarget() == null
                 && productCrieateDTO.getPrice() != null))
-            return GetAllProductPage(pageable);
+            return GetAllProductPage("Đã duyệt", pageable);
         Specification<Product> spec = Specification.where(null);
         if (productCrieateDTO.getFactory() != null && productCrieateDTO.getFactory().isPresent()) {
             Specification<Product> specFactory = ProductSpec.checkFactory(productCrieateDTO.getFactory().get());
@@ -95,6 +95,8 @@ public class ProductService {
             Specification<Product> specPrice = this.checkPrice(productCrieateDTO.getPrice().get());
             spec = spec.and(specPrice);
         }
+        Specification<Product> specStatus = ProductSpec.checkStatus("Đã duyệt");
+        spec = spec.and(specStatus);
 
         return this.productRepository.findAll(spec, pageable);
 
@@ -105,8 +107,12 @@ public class ProductService {
         return products;
     }
 
-    public Page<Product> GetAllProductPage(Pageable pageable) {
-        return this.productRepository.findAll(pageable);
+    public Page<Product> GetAllProductPage(String status, Pageable pageable) {
+        return this.productRepository.findByStatus(status, pageable);
+    }
+
+    public Page<Product> GetAllProductStatus(String status, Pageable pageable) {
+        return this.productRepository.findByStatus(status, pageable);
     }
 
     public void HandleSaveProduct(Product product) {
@@ -119,6 +125,10 @@ public class ProductService {
 
     public void deleteProduct(long id) {
         this.productRepository.deleteById(id);
+    }
+
+    public void deleteProduct(Product product) {
+        this.productRepository.delete(product);
     }
 
     public void HandleSaveProductToCart(String email, long productId, HttpSession session) {
@@ -157,6 +167,13 @@ public class ProductService {
             }
 
         }
+    }
+
+    public void RemoveProductWithCartDetail(CartDetail cartDetail) {
+        Cart cart = cartDetail.getCart();
+        cart.setSum(cart.getSum() - 1);
+        this.cartRepository.save(cart);
+        this.cartDetailsRepository.delete(cartDetail);
     }
 
     public void HanhleRemoveCartDetail(long productId, HttpSession session) {
@@ -233,6 +250,10 @@ public class ProductService {
                 session.setAttribute("sum", 0);
             }
         }
+    }
+
+    public List<CartDetail> findCartDetailByProduct(Product product) {
+        return this.cartDetailsRepository.findByProduct(product);
     }
 
 }

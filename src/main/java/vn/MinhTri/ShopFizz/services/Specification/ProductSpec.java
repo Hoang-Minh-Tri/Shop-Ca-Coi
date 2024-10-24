@@ -20,4 +20,11 @@ public class ProductSpec {
         return (root, query, criteriaBuider) -> criteriaBuider.in(root.get(Product_.TARGET)).value(targets);
     }
 
+    public static Specification<Product> checkStatus(String status) {
+        return (root, query, criteriaBuider) -> criteriaBuider.in(root.get(Product_.STATUS)).value(status);
+    }
+
+    public static Specification<Product> checkSearch(String name) {
+        return (root, query, criteriaBuider) -> criteriaBuider.like(root.get(Product_.STATUS), "%" + name + "%");
+    }
 }

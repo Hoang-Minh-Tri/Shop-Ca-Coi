@@ -24,7 +24,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Đơn đặt hàng
                         </a>
-
+                        <a class="nav-link" href="/admin/request?page=1">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Yêu cầu
+                        </a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">

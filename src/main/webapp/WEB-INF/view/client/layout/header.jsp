@@ -16,10 +16,6 @@
                             <a href="/products" class="nav-item nav-link">Sản phẩm</a>
                         </div>
                         <div class="d-flex m-3 me-0">
-                            <button
-                                class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
-                                data-bs-toggle="modal" data-bs-target="#searchModal"><i
-                                    class="fas fa-search text-primary"></i></button>
                             <c:if test="${not empty pageContext.request.userPrincipal}">
                                 <a href="/cart" class="position-relative me-4 my-auto">
                                     <i class="fa fa-shopping-bag fa-2x"></i>
@@ -42,7 +38,7 @@
                                                 <c:out value="${sessionScope.name}" />
                                             </div>
                                         </li>
-
+                                        <li><a class="dropdown-item" href="/myProduct">Sản phẩm của bạn</a></li>
                                         <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
 
                                         <li><a class="dropdown-item" href="/Order-History">Lịch sử mua hàng</a></li>

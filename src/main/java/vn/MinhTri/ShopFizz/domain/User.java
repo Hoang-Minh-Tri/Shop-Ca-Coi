@@ -1,8 +1,6 @@
 package vn.MinhTri.ShopFizz.domain;
 
 import java.util.List;
-import jakarta.annotation.Generated;
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +25,9 @@ public class User {
     private String email;
     @OneToOne(mappedBy = "user")
     private Cart cart;
+
+    @OneToMany(mappedBy = "user")
+    private List<Product> product;
 
     @NotEmpty(message = "Không được để password trống")
     @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 kí tự")
@@ -130,4 +131,13 @@ public class User {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
+
+    public List<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(List<Product> product) {
+        this.product = product;
+    }
+
 }

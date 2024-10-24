@@ -50,7 +50,7 @@ public class HomePageController {
     @GetMapping("/")
     public String getMethodName(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
         Pageable pageable = PageRequest.of(page - 1, 8);
-        Page<Product> productPage = this.productService.GetAllProductPage(pageable);
+        Page<Product> productPage = this.productService.GetAllProductPage("Đã duyệt", pageable);
         List<Product> products = productPage.getContent();
         model.addAttribute("sumPage", productPage.getTotalPages());
         model.addAttribute("nowPage", page);
