@@ -14,5 +14,7 @@ import vn.MinhTri.ShopFizz.domain.User;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUser(User user);
 
+    Page<Order> findByUser(User user, Pageable pageable);
+
     Page<Order> findAll(Pageable pageable);
 }

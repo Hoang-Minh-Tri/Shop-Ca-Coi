@@ -44,6 +44,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Order> order;
 
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
+
     public Role getRole() {
         return role;
     }

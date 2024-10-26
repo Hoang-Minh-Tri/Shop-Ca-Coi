@@ -11,13 +11,19 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import vn.MinhTri.ShopFizz.domain.Cart;
 import vn.MinhTri.ShopFizz.domain.CartDetail;
+import vn.MinhTri.ShopFizz.domain.Order;
+import vn.MinhTri.ShopFizz.domain.Order_;
 import vn.MinhTri.ShopFizz.domain.Product;
 import vn.MinhTri.ShopFizz.domain.Product_;
+import vn.MinhTri.ShopFizz.domain.Review;
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.domain.dto.ProductCrieateDTO;
+import vn.MinhTri.ShopFizz.services.OrderSevice;
 import vn.MinhTri.ShopFizz.services.ProductService;
 import vn.MinhTri.ShopFizz.services.UploadService;
 import vn.MinhTri.ShopFizz.services.UserService;
@@ -34,18 +40,20 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ItemController {
     private final ProductService productService;
     private final UploadService uploadService;
     private final UserService userService;
+    private final OrderSevice orderSevice;
 
-    public ItemController(ProductService productService, UploadService uploadService, UserService userService) {
+    public ItemController(ProductService productService, UploadService uploadService, UserService userService,
+            OrderSevice orderSevice) {
         this.productService = productService;
         this.uploadService = uploadService;
         this.userService = userService;
+        this.orderSevice = orderSevice;
     }
 
     @GetMapping("/products")
@@ -174,16 +182,28 @@ public class ItemController {
         String avatar = this.uploadService.handleSaveUpLoadFile(file, "product");
         product.setImage(avatar);
         product.setUser(user);
-        product.setStatus("Chờ xử lý");
+        if (user.getRole().getName().equals("ADMIN"))
+            product.setStatus("Đã duyệt");
+        else
+            product.setStatus("Chờ xử lý");
         product.setSold(0);
         this.productService.HandleSaveProduct(product);
         return "redirect:/myProduct";
     }
 
     @GetMapping("/myProduct")
-    public String getMyProduct(Model model) {
-        List<Product> products = this.productService.GetAllProduct();
+    public String getMyProduct(Model model, HttpServletRequest request,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        Pageable pageable = PageRequest.of(page - 1, 8,
+                Sort.by(Product_.STATUS).ascending().and(Sort.by(Order_.ID).descending()));
+        HttpSession session = request.getSession(false);
+        Long id = (Long) session.getAttribute("id");
+        User user = this.userService.GetUserById(id);
+        Page<Product> productPage = this.productService.GetAllProduct(user, pageable);
+        List<Product> products = productPage.getContent();
         model.addAttribute("products", products);
+        model.addAttribute("sumPage", productPage.getTotalPages());
+        model.addAttribute("nowPage", page);
         return "client/myProduct/show";
     }
 
@@ -254,4 +274,47 @@ public class ItemController {
 
         return "redirect:/myProduct";
     }
+
+    @GetMapping("/Order-History")
+    public String getMethodName(HttpServletRequest request, Model model,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        HttpSession session = request.getSession(false);
+        User user = new User();
+        long id = (long) session.getAttribute("id");
+        user.setId(id);
+
+        Pageable pageable = PageRequest.of(page - 1, 2, Sort.by(Order_.ID).descending());
+        Page<Order> ordersPage = this.userService.getOrderByUser(user, pageable);
+        List<Order> orders = ordersPage.getContent();
+        model.addAttribute("orders", orders);
+        model.addAttribute("sumPage", ordersPage.getTotalPages());
+        model.addAttribute("nowPage", page);
+        return "client/cart/historyOrder";
+    }
+
+    // Lấy đánh giá
+    @PostMapping("/review/{id}")
+    public String postReview(@RequestParam("assessment") String assessment, @RequestParam("star") int star,
+            HttpServletRequest request, @PathVariable("id") long id) {
+        HttpSession session = request.getSession(false);
+        Long idUser = (Long) session.getAttribute("id");
+        User user = this.userService.GetUserById(idUser);
+        Optional<Product> productOp = this.productService.fetchProductById(id);
+        if (productOp.isPresent()) {
+            Product product = productOp.get();
+            Review review = new Review();
+            LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String formattedDate = currentDate.format(formatter);
+            review.setDate(formattedDate);
+            review.setAssessment(assessment);
+            review.setProduct(product);
+            review.setStar(star);
+            review.setUser(user);
+            this.productService.SaveReview(review);
+        }
+        String s = "redirect:/product/" + id;
+        return s;
+    }
+
 }

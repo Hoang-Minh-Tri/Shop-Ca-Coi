@@ -135,6 +135,7 @@ public class ProductController {
                 this.productService.RemoveProductWithCartDetail(cartDetail);
             }
         }
+        this.productService.deleteProduct(pr);
         return "redirect:/admin/product";
     }
 

@@ -86,6 +86,10 @@ public class UserService {
         return this.orderRepository.findByUser(user);
     }
 
+    public Page<Order> getOrderByUser(User user, Pageable pageable) {
+        return this.orderRepository.findByUser(user, pageable);
+    }
+
     public Page<User> GetAllUserPage(Pageable pageable) {
         return this.userRepository.findAll(pageable);
     }

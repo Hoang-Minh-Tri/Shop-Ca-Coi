@@ -30,7 +30,7 @@
                                 <div class="row">
                                     <div class="col-12 mx-auto">
                                         <div class="d-flex justify-content-between">
-                                            <h3>Table users</h3>
+                                            <h3>BẢNG NGƯỜI DÙNG</h3>
                                             <a href="/admin/user/create" class="btn btn-primary">Tạo người dùng mới</a>
                                         </div>
 

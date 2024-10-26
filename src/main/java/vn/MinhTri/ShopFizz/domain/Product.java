@@ -1,5 +1,7 @@
 package vn.MinhTri.ShopFizz.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -28,12 +31,23 @@ public class Product {
     private String detailDesc; // Mô tả chi tiết
     @NotEmpty(message = "ShortDesc không được để trống")
     private String shortDesc; // Mô ta ngắn
-    @Min(value = 1, message = "Số lượng phải lớn hơn 0")
+    @Min(value = 1, message = "Số lượng phải lớn hơn 1")
     private long quantity; // Số lượng còn lại
     private long sold; // Số lượng đã bán
     private String factory; // Loại giống
     private String target; // Xếp loại
     private String status;
+
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews;
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     @ManyToOne
     @JoinColumn(name = "user_id")

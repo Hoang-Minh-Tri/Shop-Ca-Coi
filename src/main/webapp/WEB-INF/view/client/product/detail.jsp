@@ -193,47 +193,49 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <form action="#">
-                                        <h4 class="mb-5 fw-bold">Đánh giá của bạn</h4>
-                                        <div class="row g-4">
-                                            <div class="col-lg-6">
-                                                <div class="border-bottom rounded">
-                                                    <input type="text" class="form-control border-0 me-4"
-                                                        placeholder="Tên:">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="border-bottom rounded">
-                                                    <input type="email" class="form-control border-0"
-                                                        placeholder="Gmail:">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="border-bottom rounded my-4">
-                                                    <textarea name="" id="" class="form-control border-0" cols="30"
-                                                        rows="8" placeholder="Miêu tả đánh giá:"
-                                                        spellcheck="false"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="d-flex justify-content-between py-3 mb-5">
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="mb-0 me-3">Please rate:</p>
-                                                        <div class="d-flex align-items-center" style="font-size: 12px;">
-                                                            <i class="fa fa-star text-muted"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
+                                    <c:if test="${not empty pageContext.request.userPrincipal}">
+                                        <h4 class="mb-5 fw-bold">Thêm đánh giá:</h4>
+                                        <div class="col-lg-12 s">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center" data-start="5">
+                                                    <p class="mb-0 me-3">Đánh giá:</p>
+                                                    <div class="d-flex align-items-center stars"
+                                                        style="font-size: 12px;">
+                                                        <button style="border: 0; padding: 0;"
+                                                            class="fa fa-star text-secondary" data-index="1"></button>
+                                                        <button style="border: 0; padding: 0;" class="fa fa-star"
+                                                            data-index="2"></button>
+                                                        <button style="border: 0; padding: 0;" class="fa fa-star"
+                                                            data-index="3"></button>
+                                                        <button style="border: 0; padding: 0;" class="fa fa-star"
+                                                            data-index="4"></button>
+                                                        <button style="border: 0; padding: 0;" class="fa fa-star"
+                                                            data-index="5"></button>
                                                     </div>
-                                                    <a href="#"
-                                                        class="btn border border-secondary text-primary rounded-pill px-4 py-3">
-                                                        Lưu đánh giá</a>
                                                 </div>
+
                                             </div>
                                         </div>
-                                    </form>
+                                        <form action="/review/${product.id}" method="post">
+                                            <div class="row g-4">
+                                                <div class="col-lg-12">
+                                                    <div class="border-bottom rounded">
+                                                        <textarea lass="form-control border-0" cols="120" rows="8"
+                                                            placeholder="Miêu tả đánh giá:" spellcheck="false"
+                                                            name="assessment" type="text"></textarea>
+                                                    </div>
+                                                    <input type="text" id="ratingInput" name="star" value="1" />
+                                                </div>
+                                            </div>
+                                            <button
+                                                class="btn border border-secondary text-primary rounded-pill px-4 py-3"
+                                                style="margin: 5px;">
+                                                Lưu đánh giá</button>
+                                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                        </form>
+
+                                    </c:if>
+
                                 </div>
                             </div>
                             <div class="col-lg-4 col-xl-3">

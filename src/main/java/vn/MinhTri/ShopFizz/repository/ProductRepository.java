@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import vn.MinhTri.ShopFizz.domain.Product;
+import vn.MinhTri.ShopFizz.domain.User;
+
+import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
@@ -15,6 +18,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     Page<Product> findByStatus(String status, Pageable pageable);
 
-    Page<Product> findByStatus(String status, Specification spec, Pageable pageable);
+    List<Product> findByUser(User user);
+
+    Page<Product> findByUser(User user, Pageable pageable);
     // Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 }

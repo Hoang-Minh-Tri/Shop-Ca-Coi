@@ -134,9 +134,16 @@
 
         var button = $(this);
         var oldValue = button.parent().parent().find('input').val();
+        const input = button.parent().parent().find('input');
+        const quantity1 = input.attr("quantity1")
         if (button.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
-            change = 1;
+            if (oldValue < quantity1 - 1) {
+                var newVal = parseFloat(oldValue) + 1;
+                change = 1;
+            }
+            else
+                newVal = quantity1 - 1;
+
         } else {
             if (oldValue > 1) {
                 var newVal = parseFloat(oldValue) - 1;
@@ -145,7 +152,7 @@
                 newVal = 1;
             }
         }
-        const input = button.parent().parent().find('input');
+
         input.val(newVal);
         const index = input.attr("data-cart-detail-index")
         const el = document.getElementById(`cartDetails${index}.quantity`);
@@ -183,6 +190,20 @@
         }
     });
 
+    $('.stars button').on('click', function (e) {
+        e.preventDefault();
+        var selectedStar = $(this);
+        var index = selectedStar.attr("data-index");
+        document.getElementById("ratingInput").value = index;
+        selectedStar.parent().find('button').each(function () {
+            var star = $(this);
+            if (star.attr("data-index") <= index) {
+                star.addClass("text-secondary");
+            } else {
+                star.removeClass("text-secondary");
+            }
+        });
+    });
     function formatCurrency(value) {
 
         const formatter = new Intl.NumberFormat('vi-VN', {
@@ -290,6 +311,8 @@
         const sort = params.get('sort');
         $(`input[type="radio"][name="radio-sort"][value="${sort}"]`).prop('checked', true);
     }
+
+
 
 })(jQuery);
 

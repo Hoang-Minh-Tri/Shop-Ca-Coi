@@ -81,12 +81,11 @@
                                     </c:if>
                                     <c:forEach var="order" items="${orders}">
                                         <tr>
-                                            <td colspan="2" style="color: #0f60f5;">Mã đặt đơn = ${order.id}</td>
+                                            <td colspan="4" style="color: #0f60f5;">Mã đặt đơn = ${order.id}</td>
                                             <td colspan="1" style="color:gold">
                                                 <fmt:formatNumber type="number" value=" ${order.totalPrice}" />
                                                 đ
                                             </td>
-                                            <td colspan="2"></td>
                                             <td colspan="1" style="color:red">
                                                 ${order.status}
                                             </td>
@@ -95,16 +94,14 @@
                                             <tr>
                                                 <th scope="row">
                                                     <div class="d-flex align-items-center">
-                                                        <img src="/images/product/${orderDetail.product.image}"
+                                                        <img src="/images/product/${orderDetail.productOrderDetail.images}"
                                                             class="img-fluid me-5 rounded-circle"
                                                             style="width: 80px; height: 80px;" alt="">
                                                     </div>
                                                 </th>
                                                 <td>
                                                     <p class="mb-0 mt-4">
-                                                        <a href="/product/${orderDetail.product.id}" target="_blank">
-                                                            ${orderDetail.product.name}
-                                                        </a>
+                                                        ${orderDetail.productOrderDetail.name}
                                                     </p>
                                                 </td>
                                                 <td>
@@ -131,9 +128,33 @@
                                             </tr>
                                         </c:forEach>
                                     </c:forEach>
-
                                 </tbody>
                             </table>
+                            <c:if test="${sumPage > 0}">
+                                <div class="pagination d-flex justify-content-center mt-5">
+                                    <li class="page-item ${nowPage eq 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="/Order-History?page=${nowPage - 1}"
+                                            aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <c:forEach begin="0" end="${sumPage- 1}" varStatus="loop">
+                                        <li class="page-item">
+                                            <a class="${(loop.index + 1) eq nowPage ? 'active page-link' : 'page-link'}"
+                                                href="/Order-History?page=${loop.index + 1}">
+                                                ${loop.index + 1}
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+                                    <li class="page-item ${sumPage eq nowPage ? 'disabled' : ''}">
+                                        <a class="page-link" href="/Order-History?page=${nowPage + 1}"
+                                            aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </c:if>
                         </div>
 
                     </div>

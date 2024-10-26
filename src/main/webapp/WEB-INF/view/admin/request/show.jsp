@@ -31,7 +31,7 @@
                                     <div class="row">
                                         <div class="col-12 mx-auto">
                                             <div class="d-flex justify-content-between">
-                                                <h3>Danh sách sản phẩm chờ xử lý</h3>
+                                                <h3>DANH SÁCH CHỜ XỬ LÝ</h3>
                                             </div>
 
                                             <hr />

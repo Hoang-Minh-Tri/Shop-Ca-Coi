@@ -174,6 +174,31 @@
 
                                     </tbody>
                                 </table>
+                                <c:if test="${sumPage > 0}">
+                                    <div class="pagination d-flex justify-content-center mt-5">
+                                        <li class="page-item ${nowPage eq 1 ? 'disabled' : ''}">
+                                            <a class="page-link" href="/myProduct?page=${nowPage - 1}"
+                                                aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <c:forEach begin="0" end="${sumPage- 1}" varStatus="loop">
+                                            <li class="page-item">
+                                                <a class="${(loop.index + 1) eq nowPage ? 'active page-link' : 'page-link'}"
+                                                    href="/myProduct?page=${loop.index + 1}">
+                                                    ${loop.index + 1}
+                                                </a>
+                                            </li>
+                                        </c:forEach>
+                                        <li class="page-item ${sumPage eq nowPage ? 'disabled' : ''}">
+                                            <a class="page-link" href="/myProduct?page=${nowPage + 1}"
+                                                aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+
+                                    </div>
+                                </c:if>
                             </div>
                         </div>
                     </div>

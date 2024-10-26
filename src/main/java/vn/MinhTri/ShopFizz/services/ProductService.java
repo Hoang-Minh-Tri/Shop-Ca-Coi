@@ -14,13 +14,17 @@ import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Order;
 import vn.MinhTri.ShopFizz.domain.OrderDetail;
 import vn.MinhTri.ShopFizz.domain.Product;
+import vn.MinhTri.ShopFizz.domain.ProductOrderDetail;
+import vn.MinhTri.ShopFizz.domain.Review;
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.domain.dto.ProductCrieateDTO;
 import vn.MinhTri.ShopFizz.repository.CartDetailsRepository;
 import vn.MinhTri.ShopFizz.repository.CartRepository;
 import vn.MinhTri.ShopFizz.repository.OrderDetailRepository;
 import vn.MinhTri.ShopFizz.repository.OrderRepository;
+import vn.MinhTri.ShopFizz.repository.ProductOrderRepository;
 import vn.MinhTri.ShopFizz.repository.ProductRepository;
+import vn.MinhTri.ShopFizz.repository.ReviewRepository;
 import vn.MinhTri.ShopFizz.services.Specification.ProductSpec;
 
 @Service
@@ -31,35 +35,37 @@ public class ProductService {
     private final UserService userService;
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final ProductOrderRepository productOrderRepository;
+    private final ReviewRepository reviewRepository;
 
     public ProductService(ProductRepository productRepository, CartRepository cartRepository,
             CartDetailsRepository cartDetailsRepository, UserService userService, OrderRepository orderRepository,
-            OrderDetailRepository orderDetailRepository) {
+            OrderDetailRepository orderDetailRepository, ProductOrderRepository productOrderRepository,
+            ReviewRepository reviewRepository) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.cartDetailsRepository = cartDetailsRepository;
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
+        this.productOrderRepository = productOrderRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public Specification<Product> checkPrice(List<String> prices) {
-        Specification<Product> spec = Specification.where(null);
+        Specification<Product> Spec = (root, query, criteriaBuilder) -> criteriaBuilder.disjunction();
         for (String p : prices) {
             double min = 0;
             double max = 0;
-
             switch (p) {
                 case "duoi-10-trieu":
-                    min = 0;
+                    min = 1;
                     max = 10000000;
-
                     break;
                 case "10-15-trieu":
                     min = 10000000;
                     max = 15000000;
                     break;
-
                 case "15-20-trieu":
                     min = 15000000;
                     max = 20000000;
@@ -69,42 +75,58 @@ public class ProductService {
                     max = 200000000;
                     break;
             }
+
             if (min != 0 && max != 0) {
-                Specification<Product> specTemp = ProductSpec.PriceMinMax(min, max);
-                spec = spec.or(specTemp);
+                Specification<Product> SpecTmp = ProductSpec.PriceMinMax(min, max);
+                Spec = Spec.or(SpecTmp);
             }
         }
-        return spec;
+
+        return Spec;
+
     }
 
     public Page<Product> GetAllProductSpec(Pageable pageable, ProductCrieateDTO productCrieateDTO) {
 
-        if (productCrieateDTO.getFactory() == null && (productCrieateDTO.getTarget() == null
-                && productCrieateDTO.getPrice() != null))
-            return GetAllProductPage("Đã duyệt", pageable);
-        Specification<Product> spec = Specification.where(null);
-        if (productCrieateDTO.getFactory() != null && productCrieateDTO.getFactory().isPresent()) {
-            Specification<Product> specFactory = ProductSpec.checkFactory(productCrieateDTO.getFactory().get());
-            spec = spec.and(specFactory);
+        Specification<Product> Spec = Specification.where(null);
+        Specification<Product> specStatus = ProductSpec.checkStatus("Đã duyệt");
+        Spec = Spec.and(specStatus);
+        if (productCrieateDTO.getTarget() == null
+                && productCrieateDTO.getFactory() == null
+                && productCrieateDTO.getPrice() == null) {
+            return this.productRepository.findAll(Spec, pageable);
         }
         if (productCrieateDTO.getTarget() != null && productCrieateDTO.getTarget().isPresent()) {
-            Specification<Product> specTarget = ProductSpec.checkTaget(productCrieateDTO.getTarget().get());
-            spec = spec.and(specTarget);
+            Specification<Product> SpecTaget = ProductSpec.checkTaget(productCrieateDTO.getTarget().get());
+            Spec = Spec.and(SpecTaget);
         }
-        if (productCrieateDTO.getPrice() != null && productCrieateDTO.getPrice().isPresent()) {
-            Specification<Product> specPrice = this.checkPrice(productCrieateDTO.getPrice().get());
-            spec = spec.and(specPrice);
+        if (productCrieateDTO.getFactory() != null && productCrieateDTO.getFactory().isPresent()) {
+            Specification<Product> SpecFactory = ProductSpec.checkFactory(productCrieateDTO.getFactory().get());
+            Spec = Spec.and(SpecFactory);
         }
-        Specification<Product> specStatus = ProductSpec.checkStatus("Đã duyệt");
-        spec = spec.and(specStatus);
 
-        return this.productRepository.findAll(spec, pageable);
+        if (productCrieateDTO.getPrice() != null && productCrieateDTO.getPrice().isPresent()) {
+            Specification<Product> SpecPrice = this.checkPrice(productCrieateDTO.getPrice().get());
+            Spec = Spec.and(SpecPrice);
+        }
+
+        return this.productRepository.findAll(Spec, pageable);
 
     }
 
     public List<Product> GetAllProduct() {
         List<Product> products = this.productRepository.findAll();
         return products;
+    }
+
+    public List<Product> GetAllProduct(User user) {
+        List<Product> products = this.productRepository.findByUser(user);
+        return products;
+    }
+
+    public Page<Product> GetAllProduct(User user, Pageable pageable) {
+        return this.productRepository.findByUser(user, pageable);
+
     }
 
     public Page<Product> GetAllProductPage(String status, Pageable pageable) {
@@ -230,9 +252,25 @@ public class ProductService {
                 order.setTotalPrice(sum);
                 order = this.orderRepository.save(order);
                 for (CartDetail cd : cartDetails) {
+                    // Chuyen product sang product _
+                    ProductOrderDetail product_OrderDetail = new ProductOrderDetail();
+                    product_OrderDetail.setName(cd.getProduct().getName());
+                    product_OrderDetail.setFactory(cd.getProduct().getFactory());
+                    product_OrderDetail.setPrice(cd.getProduct().getPrice());
+                    product_OrderDetail.setQuantity(cd.getQuantity());
+                    product_OrderDetail.setTarget(cd.getProduct().getTarget());
+                    product_OrderDetail.setImages(cd.getProduct().getImage());
+                    product_OrderDetail = this.productOrderRepository.save(product_OrderDetail);
+
+                    // Cập nhật số lượng còn lại và số lượng đã bán
+                    Product product = cd.getProduct();
+                    product.setSold(product.getSold() + cd.getQuantity());
+                    product.setQuantity(product.getQuantity() - cd.getQuantity());
+                    this.productRepository.save(product);
+
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setOrder(order);
-                    orderDetail.setProduct(cd.getProduct());
+                    orderDetail.setProductOrderDetail(product_OrderDetail);
                     orderDetail.setPrice(cd.getPrice());
                     orderDetail.setQuantity(cd.getQuantity());
                     this.orderDetailRepository.save(orderDetail);
@@ -256,4 +294,22 @@ public class ProductService {
         return this.cartDetailsRepository.findByProduct(product);
     }
 
+    // Chuyển đổi các sản phẩm chỉ có số lượng 1 sang trạng thái chờ xử lý, yêu càu
+    // người dùng phải update thêm số lượng
+    public void ConverStatus() {
+        List<Product> products = this.productRepository.findAll();
+        if (products != null) {
+            for (Product pr : products) {
+                if (pr.getQuantity() == 1) {
+                    pr.setStatus("Chờ xử lý");
+                    this.productRepository.save(pr);
+                }
+            }
+        }
+    }
+
+    // Lưu các đánh giá
+    public void SaveReview(Review review) {
+        this.reviewRepository.save(review);
+    }
 }

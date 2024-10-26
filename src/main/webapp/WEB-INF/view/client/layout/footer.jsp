@@ -7,7 +7,7 @@
                     <div class="row g-4">
                         <div class="col-lg-3">
                             <a href="https://hoidanit.vn" target="_blank">
-                                <h1 class="text-primary mb-0">Koi Farm Shop</h1>
+                                <h1 class="text-primary mb-0">Koi Fish Shop</h1>
                                 <p class="text-secondary mb-0">Minh Tri</p>
                             </a>
                         </div>
@@ -22,21 +22,21 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="d-flex flex-column text-start footer-item">
-                            <h4 class="text-light mb-3">Shop Info</h4>
+                            <h4 class="text-light mb-3">Thông tin</h4>
                             <a class="btn-link" href="#">About Us</a>
 
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="d-flex flex-column text-start footer-item">
-                            <h4 class="text-light mb-3">Account</h4>
+                            <h4 class="text-light mb-3">Tài khoản</h4>
                             <a class="btn-link" href="#">My Account</a>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-item">
-                            <h4 class="text-light mb-3">Contact</h4>
-                            <p>Author:Minh TriT</p>
+                            <h4 class="text-light mb-3">Liêc lạc</h4>
+                            <p>Minh Tri</p>
                         </div>
                     </div>
                 </div>
@@ -57,8 +57,8 @@
                         <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
                         <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
                         <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
-                        Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Distributed
-                        By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
+                        Được thiết kế bởi: <a class="border-bottom" href="">Minh Trí</a> Phân phối
+                        bởi: <a class="border-bottom" href="">FAKER</a>
                     </div>
                 </div>
             </div>

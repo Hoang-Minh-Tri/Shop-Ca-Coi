@@ -3,6 +3,7 @@ package vn.MinhTri.ShopFizz.controller.admin;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.MinhTri.ShopFizz.domain.Order;
 import vn.MinhTri.ShopFizz.domain.OrderDetail;
+import vn.MinhTri.ShopFizz.domain.Order_;
+import vn.MinhTri.ShopFizz.domain.Product_;
 import vn.MinhTri.ShopFizz.repository.OrderDetailRepository;
 import vn.MinhTri.ShopFizz.repository.OrderRepository;
 import vn.MinhTri.ShopFizz.services.OrderSevice;
@@ -35,7 +38,7 @@ public class OrderController {
 
     @GetMapping("/admin/order")
     public String getOrderPage(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-        Pageable pageable = PageRequest.of(page - 1, 4);
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(Order_.ID).descending());
         Page<Order> orders = this.orderSevice.GetAllOrderPage(pageable);
         List<Order> listOrders = orders.getContent();
         model.addAttribute("nowPage", page);

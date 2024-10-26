@@ -29,16 +29,4 @@ public class DashboarchController {
         return "admin/dashboard/show";
     }
 
-    @GetMapping("/Order-History")
-    public String getMethodName(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession(false);
-        User user = new User();
-        long id = (long) session.getAttribute("id");
-        user.setId(id);
-
-        List<Order> orders = this.userService.getOrderByUser(user);
-        model.addAttribute("orders", orders);
-        return "client/cart/historyOrder";
-    }
-
 }

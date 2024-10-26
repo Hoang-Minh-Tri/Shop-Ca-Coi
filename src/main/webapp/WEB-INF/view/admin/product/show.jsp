@@ -31,7 +31,7 @@
                                     <div class="row">
                                         <div class="col-12 mx-auto">
                                             <div class="d-flex justify-content-between">
-                                                <h3>Danh sách sản phẩm đã trưng bày</h3>
+                                                <h3>DANH SÁCH SẢN PHẨM ĐÃ DUYỆT</h3>
                                                 <a href="/admin/product/create" class="btn btn-primary">Tạo sản phẩm
                                                     mới</a>
                                             </div>

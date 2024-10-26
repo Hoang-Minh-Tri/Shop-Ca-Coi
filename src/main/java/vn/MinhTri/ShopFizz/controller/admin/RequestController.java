@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import vn.MinhTri.ShopFizz.domain.Order_;
 import vn.MinhTri.ShopFizz.domain.Product;
 import vn.MinhTri.ShopFizz.services.ProductService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +33,7 @@ public class RequestController {
 
     @GetMapping("/admin/request")
     public String getRequestPage(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-        Pageable pageable = PageRequest.of(page - 1, 6);
+        Pageable pageable = PageRequest.of(page - 1, 6, Sort.by(Order_.ID).descending());
         Page<Product> products = this.productService.GetAllProductStatus("Chờ xử lý", pageable);
         List<Product> listProducts = products.getContent();
         model.addAttribute("products", listProducts);
