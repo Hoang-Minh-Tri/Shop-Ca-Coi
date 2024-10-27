@@ -114,11 +114,14 @@
                                                 <input type="hidden" name="${_csrf.parameterName}"
                                                     value="${_csrf.token}" />
                                             </div>
-                                            <button
-                                                class="mx-auto btn border border-secondary rounded-pill px-3 text-primary">
-                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                Thêm vào giỏ hàng
-                                            </button>
+                                            <c:if test="${check == 0}">
+                                                <button
+                                                    class="mx-auto btn border border-secondary rounded-pill px-3 text-primary">
+                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                    Thêm vào giỏ hàng
+                                                </button>
+                                            </c:if>
+
                                         </form>
                                     </div>
                                     <div class="col-lg-12">
@@ -141,59 +144,44 @@
                                             </div>
                                             <div class="tab-pane" id="nav-mission" role="tabpanel"
                                                 aria-labelledby="nav-mission-tab">
-                                                <div class="d-flex">
-                                                    <img src="/client/img/avatar.jpg"
-                                                        class="img-fluid rounded-circle p-3"
-                                                        style="width: 100px; height: 100px;" alt="">
-                                                    <div class="">
-                                                        <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
-                                                        <div class="d-flex justify-content-between">
-                                                            <h5>Minh Trí</h5>
-                                                            <div class="d-flex mb-3">
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star"></i>
+                                                <c:if test="${ empty reviews}">
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            Chưa có đánh giá.
+                                                        </td>
+                                                    </tr>
+                                                </c:if>
+                                                <c:forEach var="review" items="${reviews}">
+                                                    <div class="d-flex">
+                                                        <img src="/images/avatar/${review.user.avatar}"
+                                                            class="img-fluid rounded-circle p-3"
+                                                            style="width: 100px; height: 100px;" alt="">
+                                                        <div class="">
+                                                            <p class="mb-2" style="font-size: 14px;">${review.date}</p>
+                                                            <div class="d-flex justify-content-between">
+                                                                <h5>${review.user.fullName}</h5>
+                                                                <div class="d-flex mb-3 ">
+                                                                    <c:forEach var="i" begin="1" end="5">
+                                                                        <c:if test="${i <= review.star}">
+                                                                            <i class="fa fa-star text-secondary"></i>
+                                                                        </c:if>
+                                                                        <c:if test="${i > review.star}">
+                                                                            <i class="fa fa-star"></i>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                </div>
                                                             </div>
+                                                            <p>
+                                                                ${review.assessment}
+                                                            </p>
                                                         </div>
-                                                        <p>Đây là một loại cá rất đẹp, sống rất tốt, thích nghi với môi
-                                                            trường nhanh, phù hợp, giá cả hợp lý.
-                                                        </p>
                                                     </div>
-                                                </div>
-                                                <div class="d-flex">
-                                                    <img src="/client/img/avatar.jpg"
-                                                        class="img-fluid rounded-circle p-3"
-                                                        style="width: 100px; height: 100px;" alt="">
-                                                    <div class="">
-                                                        <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
-                                                        <div class="d-flex justify-content-between">
-                                                            <h5>Thanh Tâm</h5>
-                                                            <div class="d-flex mb-3">
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                            </div>
-                                                        </div>
-                                                        <p class="text-dark">
-                                                            Sản phẩm cá Koi này có màu sắc tươi sáng và đa dạng, mang
-                                                            lại vẻ đẹp thẩm mỹ cao cho hồ cá. Chất lượng cá tốt, khỏe
-                                                            mạnh và có sức sống lâu dài. Đặc biệt, cá Koi được chọn lọc
-                                                            kỹ càng, kích thước đều đặn và không có dấu hiệu bệnh tật.
-                                                            Tuy nhiên, giá thành hơi cao so với thị trường, nhưng điều
-                                                            này phản ánh đúng chất lượng của sản phẩm. Nhìn chung, đây
-                                                            là một lựa chọn tuyệt vời cho những ai yêu thích cá cảnh và
-                                                            muốn trang trí không gian sống của mình.
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                                </c:forEach>
+
                                             </div>
                                         </div>
                                     </div>
-                                    <c:if test="${not empty pageContext.request.userPrincipal}">
+                                    <c:if test="${not empty pageContext.request.userPrincipal and check == 0}">
                                         <h4 class="mb-5 fw-bold">Thêm đánh giá:</h4>
                                         <div class="col-lg-12 s">
                                             <div class="d-flex justify-content-between">

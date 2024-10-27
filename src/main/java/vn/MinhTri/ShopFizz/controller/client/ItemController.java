@@ -92,8 +92,17 @@ public class ItemController {
     }
 
     @GetMapping("/product/{id}")
-    public String getMethodName(@PathVariable("id") long id, Model model) {
+    public String getMethodName(@PathVariable("id") long id, Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        long idUser = (long) session.getAttribute("id");
+        User user = this.userService.GetUserById(idUser);
         Product pr = this.productService.fetchProductById(id).get();
+        int check = 0;
+        if (user == pr.getUser())
+            check = 1;
+        model.addAttribute("check", check); // Kiểm tra xem sản phẩm có phải của người đang đăng nhập không
+        List<Review> reviews = pr.getReviews();
+        model.addAttribute("reviews", reviews);
         model.addAttribute("product", pr);
         model.addAttribute("id", id);
         return "client/product/detail";

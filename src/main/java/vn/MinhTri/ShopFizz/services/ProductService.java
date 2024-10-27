@@ -155,6 +155,13 @@ public class ProductService {
 
     public void HandleSaveProductToCart(String email, long productId, HttpSession session) {
         User user = this.userService.getUserByEmail(email);
+        Optional<Product> products = this.fetchProductById(productId);
+        // Nếu như sản phẩm vừa thêm vào là của chính bản thân người dùng thì không thể
+        // thêm vào
+        if (products.isPresent()) {
+            if (products.get().getUser() == user)
+                return;
+        }
         if (user != null) {
             Cart cart = this.cartRepository.findByUser(user);
             if (cart == null) {
