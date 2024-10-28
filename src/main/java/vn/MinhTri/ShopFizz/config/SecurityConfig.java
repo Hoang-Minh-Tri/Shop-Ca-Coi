@@ -63,8 +63,8 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, // Cho phép truy cập tới view
                                 DispatcherType.INCLUDE) // chặn các include
                         .permitAll()
-                        .requestMatchers("/", "/login", "product/**", "/client/**", "/css/**", "/js/**",
-                                "/images/**")
+                        .requestMatchers("/", "/login", "/products/**", "/client/**", "/css/**", "/js/**",
+                                "/images/**", "/product/**")
                         .permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")

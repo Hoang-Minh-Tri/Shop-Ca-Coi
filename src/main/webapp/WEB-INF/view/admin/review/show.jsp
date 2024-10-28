@@ -22,16 +22,16 @@
                     <div id="layoutSidenav_content">
                         <main>
                             <div class="container-fluid px-4">
-                                <h1 class="mt-4">Quản lí yêu cầu từ người dùng</h1>
+                                <h1 class="mt-4">Quản lí đánh giá từ người dùng</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
-                                    <li class="breadcrumb-item active">Yêu cầu/li>
+                                    <li class="breadcrumb-item active">Đánh giá</li>
                                 </ol>
                                 <div class="mt-5">
                                     <div class="row">
                                         <div class="col-12 mx-auto">
                                             <div class="d-flex justify-content-between">
-                                                <h3>DANH SÁCH CHỜ XỬ LÝ</h3>
+                                                <h3>DANH SÁCH phản hồi</h3>
                                             </div>
 
                                             <hr />
@@ -41,11 +41,10 @@
                                                     <tr>
                                                         <th>ID</th>
                                                         <th>Tên sản phẩm</th>
-                                                        <th>Giá sản phẩm</th>
-                                                        <th>Tên chủng loại</th>
-                                                        <th>Số lượng</th>
-                                                        <th>Người bán</th>
-                                                        <th>Vai trò</th>
+                                                        <th>Người đánh giá</th>
+                                                        <th>Thời gian</th>
+                                                        <th>Trạng thái</th>
+                                                        <th>Chức năng xử lý </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

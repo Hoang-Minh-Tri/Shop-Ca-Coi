@@ -28,6 +28,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Yêu cầu
                         </a>
+                        <a class="nav-link" href="/admin/review?page=1">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Phản hồi
+                        </a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">

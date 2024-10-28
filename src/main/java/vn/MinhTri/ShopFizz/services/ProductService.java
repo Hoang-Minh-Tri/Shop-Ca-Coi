@@ -319,4 +319,11 @@ public class ProductService {
     public void SaveReview(Review review) {
         this.reviewRepository.save(review);
     }
+
+    // Kiểm tra xem sản phẩm đã từng được mua hay chưa thông qua ảnh, vì mỗi sản
+    // phẩm chỉ có 1 ảnh riêng biệt và bên sản phẩm lịch sử mua hàng có ảnh giống
+    // ảnh product thâth
+    public boolean CheckPurchaseStatus(String images) {
+        return this.productOrderRepository.existsByimages(images);
+    }
 }

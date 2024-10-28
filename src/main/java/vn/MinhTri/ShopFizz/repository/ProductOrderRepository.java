@@ -7,5 +7,5 @@ import vn.MinhTri.ShopFizz.domain.ProductOrderDetail;
 
 @Repository
 public interface ProductOrderRepository extends JpaRepository<ProductOrderDetail, Long> {
-
+    boolean existsByimages(String images);
 }

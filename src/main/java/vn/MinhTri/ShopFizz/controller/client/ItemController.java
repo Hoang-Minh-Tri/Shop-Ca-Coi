@@ -105,6 +105,7 @@ public class ItemController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("product", pr);
         model.addAttribute("id", id);
+        model.addAttribute("user", user);
         return "client/product/detail";
     }
 
@@ -320,6 +321,11 @@ public class ItemController {
             review.setProduct(product);
             review.setStar(star);
             review.setUser(user);
+            if (this.productService.CheckPurchaseStatus(product.getImage()))
+                review.setPurchaseStatus("Đã mua");
+            else
+                review.setPurchaseStatus("Chưa mua");
+            boolean kt = this.productService.CheckPurchaseStatus(product.getImage());
             this.productService.SaveReview(review);
         }
         String s = "redirect:/product/" + id;

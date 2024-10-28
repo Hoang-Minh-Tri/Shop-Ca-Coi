@@ -19,6 +19,7 @@ public class Review {
 
     private int star;
 
+    private String purchaseStatus; // Người đánh giá đã mua hàng hay chưa
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
@@ -75,6 +76,14 @@ public class Review {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getPurchaseStatus() {
+        return purchaseStatus;
+    }
+
+    public void setPurchaseStatus(String purchaseStatus) {
+        this.purchaseStatus = purchaseStatus;
     }
 
 }

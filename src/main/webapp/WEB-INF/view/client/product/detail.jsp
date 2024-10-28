@@ -170,6 +170,11 @@
                                                                         </c:if>
                                                                     </c:forEach>
                                                                 </div>
+                                                                <div>
+                                                                    ${review.purchaseStatus}
+                                                                </div>
+
+
                                                             </div>
                                                             <p>
                                                                 ${review.assessment}
