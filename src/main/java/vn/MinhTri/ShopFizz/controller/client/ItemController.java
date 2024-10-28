@@ -25,6 +25,7 @@ import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.domain.dto.ProductCrieateDTO;
 import vn.MinhTri.ShopFizz.services.OrderSevice;
 import vn.MinhTri.ShopFizz.services.ProductService;
+import vn.MinhTri.ShopFizz.services.ReviewService;
 import vn.MinhTri.ShopFizz.services.UploadService;
 import vn.MinhTri.ShopFizz.services.UserService;
 
@@ -48,13 +49,15 @@ public class ItemController {
     private final UploadService uploadService;
     private final UserService userService;
     private final OrderSevice orderSevice;
+    private final ReviewService reviewService;
 
     public ItemController(ProductService productService, UploadService uploadService, UserService userService,
-            OrderSevice orderSevice) {
+            OrderSevice orderSevice, ReviewService reviewService) {
         this.productService = productService;
         this.uploadService = uploadService;
         this.userService = userService;
         this.orderSevice = orderSevice;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("/products")
@@ -303,7 +306,7 @@ public class ItemController {
         return "client/cart/historyOrder";
     }
 
-    // Lấy đánh giá
+    // Lưu đánh giá
     @PostMapping("/review/{id}")
     public String postReview(@RequestParam("assessment") String assessment, @RequestParam("star") int star,
             HttpServletRequest request, @PathVariable("id") long id) {
@@ -322,12 +325,12 @@ public class ItemController {
             review.setProduct(product);
             review.setStar(star);
             review.setUser(user);
+            review.setStatus("Chưa xử lý");
             if (this.productService.CheckPurchaseStatus(product.getImage()))
                 review.setPurchaseStatus("Đã mua");
             else
                 review.setPurchaseStatus("Chưa mua");
-            boolean kt = this.productService.CheckPurchaseStatus(product.getImage());
-            this.productService.SaveReview(review);
+            this.reviewService.SaveReview(review);
         }
         String s = "redirect:/product/" + id;
         return s;
@@ -336,8 +339,7 @@ public class ItemController {
     // Xóa đánh giá của mình (người đánh giá tự xóa)
     @PostMapping("/review/delete/{id}")
     public String postDeleteReview(@PathVariable("id") long id, @RequestParam("id") String idProduct) {
-        this.productService.deleteReview(id);
+        this.reviewService.deleteReview(id);
         return "redirect:/product/" + idProduct;
     }
-
 }

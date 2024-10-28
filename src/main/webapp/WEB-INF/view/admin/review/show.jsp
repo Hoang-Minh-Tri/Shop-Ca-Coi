@@ -31,7 +31,7 @@
                                     <div class="row">
                                         <div class="col-12 mx-auto">
                                             <div class="d-flex justify-content-between">
-                                                <h3>DANH SÁCH phản hồi</h3>
+                                                <h3>DANH SÁCH PHẢN HỒI</h3>
                                             </div>
 
                                             <hr />
@@ -43,28 +43,26 @@
                                                         <th>Tên sản phẩm</th>
                                                         <th>Người đánh giá</th>
                                                         <th>Thời gian</th>
+                                                        <th>Chi tiết</th>
                                                         <th>Trạng thái</th>
                                                         <th>Chức năng xử lý </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach var="product" items="${products}">
+                                                    <c:forEach var="review" items="${reviews}">
                                                         <tr>
-                                                            <th>${product.id}</th>
-                                                            <td>${product.name}</td>
+                                                            <th>${review.id}</th>
+                                                            <td>${review.product.name}</td>
+                                                            <td>${review.user.fullName}</td>
+                                                            <td>${review.date}</td>
+                                                            <td>${review.assessment}</td>
+                                                            <td>${review.status}</td>
                                                             <td>
-                                                                <fmt:formatNumber type="number"
-                                                                    value="${product.price}" />đ
-                                                            </td>
-                                                            <td>${product.factory}</td>
-                                                            <td>${product.quantity}</td>
-                                                            <td>${product.user.fullName}</td>
-                                                            <td>
-                                                                <a href="/admin/request/${product.id}"
-                                                                    class="btn btn-success">Xem chi tiết</a>
-                                                                <a href="/admin/request/agree/${product.id}"
-                                                                    class="btn btn-warning  mx-2">Đồng ý</a>
-                                                                <a href="/admin/request/delete/${product.id}"
+                                                                <c:if test="${review.status eq 'Chưa xử lý'}">
+                                                                    <a href="/admin/review/check/${review.id}"
+                                                                        class="btn btn-warning  mx-2">Đã kiểm tra</a>
+                                                                </c:if>
+                                                                <a href="/admin/review/delete/${review.id}"
                                                                     class="btn btn-danger">Xóa</a>
                                                             </td>
                                                         </tr>
@@ -78,7 +76,7 @@
                                                     <ul class="pagination justify-content-center">
                                                         <li class="page-item">
                                                             <a class="${(nowPage) eq 1 ? 'disabled page-link' : 'page-link'}"
-                                                                href="/admin/request?page=${nowPage - 1}"
+                                                                href="/admin/review?page=${nowPage - 1}"
                                                                 aria-label="Previous">
                                                                 <span aria-hidden="true">&laquo;</span>
                                                             </a>
@@ -86,14 +84,14 @@
                                                         <c:forEach begin="0" end="${sumPage - 1}" varStatus="loop">
                                                             <li class="page-item ">
                                                                 <a class="${(loop.index + 1) eq nowPage ? 'active page-link' : 'page-link'}"
-                                                                    href="/admin/request?page=${loop.index+1}">
+                                                                    href="/admin/review?page=${loop.index+1}">
                                                                     ${loop.index+1}
                                                                 </a>
                                                             </li>
                                                         </c:forEach>
                                                         <li class="page-item">
                                                             <a class="${nowPage eq sumPage ? 'disabled page-link' : 'page-link'}"
-                                                                href="/admin/request?page=${nowPage + 1}"
+                                                                href="/admin/review?page=${nowPage + 1}"
                                                                 aria-label="Next">
                                                                 <span aria-hidden="true">&raquo;</span>
                                                             </a>

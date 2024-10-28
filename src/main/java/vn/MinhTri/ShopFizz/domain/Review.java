@@ -19,6 +19,16 @@ public class Review {
 
     private int star;
 
+    private String status; // Trạng thái đánh giá admin đã xem hay chưa
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     private String purchaseStatus; // Người đánh giá đã mua hàng hay chưa
     @ManyToOne
     @JoinColumn(name = "product_id")

@@ -315,11 +315,6 @@ public class ProductService {
         }
     }
 
-    // Lưu các đánh giá
-    public void SaveReview(Review review) {
-        this.reviewRepository.save(review);
-    }
-
     // Kiểm tra xem sản phẩm đã từng được mua hay chưa thông qua ảnh, vì mỗi sản
     // phẩm chỉ có 1 ảnh riêng biệt và bên sản phẩm lịch sử mua hàng có ảnh giống
     // ảnh product thâth
@@ -327,8 +322,4 @@ public class ProductService {
         return this.productOrderRepository.existsByimages(images);
     }
 
-    // Xóa đánh giá của người dùng
-    public void deleteReview(long id) {
-        this.reviewRepository.deleteById(id);
-    }
 }
