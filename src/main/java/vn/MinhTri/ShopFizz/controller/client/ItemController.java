@@ -40,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ItemController {
@@ -330,6 +331,13 @@ public class ItemController {
         }
         String s = "redirect:/product/" + id;
         return s;
+    }
+
+    // Xóa đánh giá của mình (người đánh giá tự xóa)
+    @PostMapping("/review/delete/{id}")
+    public String postDeleteReview(@PathVariable("id") long id, @RequestParam("id") String idProduct) {
+        this.productService.deleteReview(id);
+        return "redirect:/product/" + idProduct;
     }
 
 }

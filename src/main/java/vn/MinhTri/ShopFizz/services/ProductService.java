@@ -326,4 +326,9 @@ public class ProductService {
     public boolean CheckPurchaseStatus(String images) {
         return this.productOrderRepository.existsByimages(images);
     }
+
+    // Xóa đánh giá của người dùng
+    public void deleteReview(long id) {
+        this.reviewRepository.deleteById(id);
+    }
 }

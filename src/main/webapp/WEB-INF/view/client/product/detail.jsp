@@ -157,7 +157,22 @@
                                                             class="img-fluid rounded-circle p-3"
                                                             style="width: 100px; height: 100px;" alt="">
                                                         <div class="">
-                                                            <p class="mb-2" style="font-size: 14px;">${review.date}</p>
+                                                            <p class="mb-2" style="font-size: 14px;">
+                                                                ${review.date}</p>
+                                                            <c:if test="${review.user == user}">
+                                                                <form action="/review/delete/${review.id}"
+                                                                    method="post">
+                                                                    <div>
+                                                                        <input type="hidden"
+                                                                            name="${_csrf.parameterName}"
+                                                                            value="${_csrf.token}" />
+                                                                    </div>
+                                                                    <button class="btn btn-danger">Xóa</button>
+                                                                    <input style="display: none;" name="id"
+                                                                        value="${id}" />
+
+                                                                </form>
+                                                            </c:if>
                                                             <div class="d-flex justify-content-between">
                                                                 <h5>${review.user.fullName}</h5>
                                                                 <div class="d-flex mb-3 ">
