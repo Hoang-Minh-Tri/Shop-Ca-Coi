@@ -114,6 +114,7 @@
 
     // Modal Video
     $(document).ready(function () {
+
         var $videoSrc;
         $('.btn-play').click(function () {
             $videoSrc = $(this).data("src");
@@ -312,6 +313,18 @@
         $(`input[type="radio"][name="radio-sort"][value="${sort}"]`).prop('checked', true);
     }
 
+
+    $('#search-icon-1 button').on('click', function () {
+        $('#search-icon-1 button').on('click', function () {
+            var inputValue = $('#search-input').val();  // Lấy giá trị từ ô tìm kiếm dựa trên ID
+            if (inputValue) { // Kiểm tra xem người dùng đã nhập gì chưa
+                var newUrl = '/search?name=' + encodeURIComponent(inputValue); // Mã hóa và tạo đường dẫn
+                window.location.href = newUrl; // Chuyển hướng đến đường dẫn mới
+            } else {
+                alert("Vui lòng nhập từ khóa tìm kiếm.");
+            }
+        });
+    });
 
 
 })(jQuery);

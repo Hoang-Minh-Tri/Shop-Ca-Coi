@@ -45,4 +45,9 @@ public class ReviewService {
     public void DeleteById(Long id) {
         this.reviewRepository.deleteById(id);
     }
+
+    // Lấy các đánh giá của sản phẩm do mình bán
+    public Page<Review> GetReviewByMyProduct(long id, Pageable pageable) {
+        return this.reviewRepository.findReviewByProduct(id, pageable);
+    }
 }

@@ -93,22 +93,27 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <h4 class="fw-bold mb-3">${product.name}</h4>
-                                        <p class="mb-4">${product.factory}</p>
+                                        <h4 class="fw-bold mb-3" style="color: rgba(214, 55, 55, 0.493);">
+                                            ${product.name}</h4>
+                                        <p class="mb-4">Loại cá: ${product.factory}</p>
+                                        <p class="mb-4">Chất lượng: ${product.target}</p>
+                                        <p class="mb-4">Người bán: ${product.user.fullName}</p>
                                         <h5 class="fw-bold mb-3">
+                                            Giá:
                                             <fmt:formatNumber type="number" value="${product.price}" /> đ
                                         </h5>
                                         <div class="d-flex mb-4">
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star"></i>
+                                            Xếp hạng:
+                                            <c:forEach var="i" begin="1" end="5">
+                                                <c:if test="${i <= avg}">
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                </c:if>
+                                                <c:if test="${i > avg}">
+                                                    <i class="fa fa-star"></i>
+                                                </c:if>
+                                            </c:forEach>
                                         </div>
                                         <p class="mb-3">${product.shortDesc}</p>
-                                        <div class="input-group quantity mb-5" style="width: 100px;">
-
-                                        </div>
                                         <form action="/addProductToCart/${product.id}" method="post">
                                             <div>
                                                 <input type="hidden" name="${_csrf.parameterName}"
@@ -188,8 +193,6 @@
                                                                 <div>
                                                                     ${review.purchaseStatus}
                                                                 </div>
-
-
                                                             </div>
                                                             <p>
                                                                 ${review.assessment}
@@ -249,32 +252,29 @@
                             <div class="col-lg-4 col-xl-3">
                                 <div class="row g-4 fruite">
                                     <div class="col-lg-12">
-                                        <div class="input-group w-100 mx-auto d-flex mb-4">
-                                            <input type="search" class="form-control p-3" placeholder="keywords"
-                                                aria-describedby="search-icon-1">
-                                            <span id="search-icon-1" class="input-group-text p-3"><i
-                                                    class="fa fa-search"></i></span>
-                                        </div>
-                                        <div class="mb-4">
-                                            <h4>Categories</h4>
-                                            <ul class="list-unstyled fruite-categorie">
 
+                                        <div class="mb-4">
+                                            <h4>Thể loại</h4>
+                                            <ul class="list-unstyled fruite-categorie">
                                                 <li>
                                                     <div class="d-flex justify-content-between fruite-name">
-                                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>Utsurimono</a>
-                                                        <span>(5)</span>
+                                                        <a href="/products?page=1&sort=gia-nothing&factory=Utsurimono"><i
+                                                                class="bi bi-cart-fill me-2"></i>Utsurimono</a>
+                                                        <span>${numUtsurimono}</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="d-flex justify-content-between fruite-name">
-                                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>Hikarimono</a>
-                                                        <span>(2)</span>
+                                                        <a href="/products?page=1&sort=gia-nothing&factory=Hikarimono"><i
+                                                                class="bi bi-cart-fill me-2"></i>Hikarimono</a>
+                                                        <span>${numHikarimono}</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="d-flex justify-content-between fruite-name">
-                                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>GooSanKe</a>
-                                                        <span>(8)</span>
+                                                        <a href="/products?page=1&sort=gia-nothing&factory=Gosanke"><i
+                                                                class="bi bi-cart-fill me-2"></i>GooSanKe</a>
+                                                        <span>${numGooSanKe}</span>
                                                     </div>
                                                 </li>
                                             </ul>

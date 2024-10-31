@@ -38,14 +38,6 @@ public class ReviewController {
         return "admin/review/show";
     }
 
-    @GetMapping("/admin/review/check/{id}")
-    public String postCheckReview(@PathVariable("id") long id) {
-        Review review = this.reviewService.GetReviewById(id);
-        review.setStatus("Đã xử lý");
-        this.reviewService.Save(review);
-        return "redirect:/admin/review?page=1";
-    }
-
     @GetMapping("/admin/review/delete/{id}")
     public String postDeleteReview(@PathVariable("id") long id) {
         this.reviewService.DeleteById(id);

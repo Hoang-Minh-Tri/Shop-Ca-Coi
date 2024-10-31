@@ -17,6 +17,9 @@
                         </div>
                         <div class="d-flex m-3 me-0">
                             <c:if test="${not empty pageContext.request.userPrincipal}">
+                                <button
+                                    class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"><a
+                                        href="/search" class="fas fa-search text-primary"></a></button>
                                 <a href="/cart" class="position-relative me-4 my-auto">
                                     <i class="fa fa-shopping-bag fa-2x"></i>
                                     <span
@@ -38,7 +41,7 @@
                                                 <c:out value="${sessionScope.name}" />
                                             </div>
                                         </li>
-                                        <li><a class="dropdown-item" href="/myProduct">Sản phẩm của bạn</a></li>
+                                        <li><a class="dropdown-item" href="/seller">Trang dành cho người bán</a></li>
                                         <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
 
                                         <li><a class="dropdown-item" href="/Order-History">Lịch sử mua hàng</a></li>
@@ -54,12 +57,14 @@
                                         </li>
                                     </ul>
                                 </div>
+
                             </c:if>
                             <c:if test="${empty pageContext.request.userPrincipal}">
                                 <a href="/login" class="position-relative me-4 my-auto">
                                     Đăng nhập
                                 </a>
                             </c:if>
+
 
                         </div>
                     </div>

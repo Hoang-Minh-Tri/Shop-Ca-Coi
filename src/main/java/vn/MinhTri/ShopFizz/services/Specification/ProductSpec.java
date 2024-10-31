@@ -24,4 +24,8 @@ public class ProductSpec {
     public static Specification<Product> checkStatus(String status) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Product_.STATUS), status);
     }
+
+    public static Specification<Product> nameLike(String name) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Product_.NAME), "%" + name + "%");
+    }
 }

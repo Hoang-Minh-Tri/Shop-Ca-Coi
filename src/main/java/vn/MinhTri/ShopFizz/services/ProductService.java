@@ -137,6 +137,10 @@ public class ProductService {
         return this.productRepository.findByStatus(status, pageable);
     }
 
+    public Page<Product> GetAllProductStatus(User user, String status, Pageable pageable) {
+        return this.productRepository.findByUserAndStatus(user, status, pageable);
+    }
+
     public void HandleSaveProduct(Product product) {
         this.productRepository.save(product);
     }
@@ -251,7 +255,7 @@ public class ProductService {
                 order.setReceiverAddress(receiverAddress);
                 order.setReceiverName(receiverName);
                 order.setReceiverPhone(receiverPhone);
-                order.setStatus("Chờ xử lý");
+                order.setStatus("Chưa hoàn thành");
                 long sum = 0;
                 for (CartDetail cd : cartDetails) {
                     sum += (cd.getQuantity() * cd.getPrice());
@@ -267,6 +271,7 @@ public class ProductService {
                     product_OrderDetail.setQuantity(cd.getQuantity());
                     product_OrderDetail.setTarget(cd.getProduct().getTarget());
                     product_OrderDetail.setImages(cd.getProduct().getImage());
+                    product_OrderDetail.setUserName(cd.getProduct().getUser().getEmail());
                     product_OrderDetail = this.productOrderRepository.save(product_OrderDetail);
 
                     // Cập nhật số lượng còn lại và số lượng đã bán
@@ -280,6 +285,8 @@ public class ProductService {
                     orderDetail.setProductOrderDetail(product_OrderDetail);
                     orderDetail.setPrice(cd.getPrice());
                     orderDetail.setQuantity(cd.getQuantity());
+                    orderDetail.setStatus("Chờ xử lý");
+                    orderDetail.setUserNameBuy(user.getFullName());
                     this.orderDetailRepository.save(orderDetail);
                 }
 
@@ -322,4 +329,39 @@ public class ProductService {
         return this.productOrderRepository.existsByimages(images);
     }
 
+    // Tính số sao trung bình
+    public int avgStar(long id) {
+        Optional<Product> productOpptional = this.productRepository.findById(id);
+        if (productOpptional.isPresent()) {
+            Product product = productOpptional.get();
+            List<Review> reviews = product.getReviews();
+            int tong = 0, num = 0;
+            if (reviews.size() > 0) {
+                for (Review review : reviews) {
+                    tong += review.getStar();
+                    num++;
+                }
+                return tong / num;
+            }
+
+        }
+        return 5;
+    }
+
+    // Đếm số lượng sản phẩm thuộc loại Utsurimono
+    public int countUtsurimono() {
+        return this.productRepository.countByFactory("Utsurimono");
+    }
+
+    public int countHikarimono() {
+        return this.productRepository.countByFactory("Hikarimono");
+    }
+
+    public int countGooSanKe() {
+        return this.productRepository.countByFactory("GoSanKe");
+    }
+
+    public List<Product> search(String name) {
+        return this.productRepository.findAll(ProductSpec.nameLike(name));
+    }
 }

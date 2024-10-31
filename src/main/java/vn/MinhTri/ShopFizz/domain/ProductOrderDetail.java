@@ -16,6 +16,8 @@ public class ProductOrderDetail {
     private double price;
     private String images;
 
+    private String userName;// Người bán
+
     public String getImages() {
         return images;
     }
@@ -74,6 +76,14 @@ public class ProductOrderDetail {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

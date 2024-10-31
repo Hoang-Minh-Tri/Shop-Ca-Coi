@@ -24,7 +24,7 @@
                                     <div class="col-lg-5">
                                         <div class="card shadow-lg border-0 rounded-lg mt-5">
                                             <div class="card-header">
-                                                <h3 class="text-center font-weight-light my-4">Login</h3>
+                                                <h3 class="text-center font-weight-light my-4">Đăng nhập</h3>
                                             </div>
                                             <div class="card-body">
                                                 <form method="post" accept="/login">
@@ -54,14 +54,18 @@
                                                     <div class="mt-4 mb-0">
                                                         <div class="d-grid">
                                                             <button class="btn btn-primary btn-block">
-                                                                Login
+                                                                Đăng nhập
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="card-footer text-center py-3">
-                                                <div class="small"><a href="/register">Need an account? Sign up!</a>
+                                            <div class="card-footer py-3">
+
+                                                <div
+                                                    class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                    <a class="small" href="/forgot">Quên mật khẩu?</a>
+                                                    <a class="btn btn-primary" href="/register">Đăng kí</a>
                                                 </div>
                                             </div>
                                         </div>

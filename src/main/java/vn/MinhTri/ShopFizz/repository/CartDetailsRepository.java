@@ -16,4 +16,5 @@ public interface CartDetailsRepository extends JpaRepository<CartDetail, Long> {
     List<CartDetail> findByCart(Cart cart);
 
     List<CartDetail> findByProduct(Product product);
+
 }

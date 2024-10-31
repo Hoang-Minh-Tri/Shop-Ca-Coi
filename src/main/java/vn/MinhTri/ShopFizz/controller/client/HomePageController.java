@@ -15,6 +15,7 @@ import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Product;
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.domain.dto.DtoRegister;
+import vn.MinhTri.ShopFizz.domain.dto.Forgot;
 import vn.MinhTri.ShopFizz.repository.CartDetailsRepository;
 import vn.MinhTri.ShopFizz.repository.CartRepository;
 import vn.MinhTri.ShopFizz.services.ProductService;
@@ -113,4 +114,21 @@ public class HomePageController {
         return "client/cart/show";
     }
 
+    @GetMapping("/forgot")
+    public String getForgot(Model model) {
+        model.addAttribute("forgot", new Forgot());
+        return "client/auth/forgot";
+    }
+
+    @PostMapping("/forgot")
+    public String postforgotpage(@ModelAttribute("forgot") @Valid Forgot forgot,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "client/auth/forgot";
+        User user = this.userService.getUserByEmail(forgot.getEmail());
+        String hashPass = this.passwordEncoder.encode(forgot.getPassword());
+        user.setPassword(hashPass);
+        this.userService.HandleSaveUser(user);
+        return "redirect:/login";
+    }
 }

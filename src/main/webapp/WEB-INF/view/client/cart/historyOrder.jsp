@@ -123,7 +123,11 @@
                                                             value="${orderDetail.price * orderDetail.quantity}" /> đ
                                                     </p>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <p class="mb-0 mt-4">
+                                                        ${orderDetail.status}
+                                                    </p>
+                                                </td>
 
                                             </tr>
                                         </c:forEach>

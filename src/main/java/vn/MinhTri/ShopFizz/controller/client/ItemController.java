@@ -41,7 +41,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ItemController {
@@ -101,11 +100,19 @@ public class ItemController {
         long idUser = (long) session.getAttribute("id");
         User user = this.userService.GetUserById(idUser);
         Product pr = this.productService.fetchProductById(id).get();
+        int avg = this.productService.avgStar(id);
+        model.addAttribute("avg", avg);
         int check = 0;
         if (user == pr.getUser())
             check = 1;
         model.addAttribute("check", check); // Kiểm tra xem sản phẩm có phải của người đang đăng nhập không
         List<Review> reviews = pr.getReviews();
+        int numUtsurimono = this.productService.countUtsurimono();
+        model.addAttribute("numUtsurimono", numUtsurimono);
+        int numHikarimono = this.productService.countHikarimono();
+        model.addAttribute("numHikarimono", numHikarimono);
+        int numGooSanKe = this.productService.countGooSanKe();
+        model.addAttribute("numGooSanKe", numGooSanKe);
         model.addAttribute("reviews", reviews);
         model.addAttribute("product", pr);
         model.addAttribute("id", id);
@@ -166,132 +173,18 @@ public class ItemController {
             @RequestParam("receiverAddress") String receiverAddress,
             @RequestParam("receiverPhone") String receiverPhone) {
         HttpSession session = request.getSession(false);
-        User user = new User();
+
         long id = (long) session.getAttribute("id");
-        user.setId(id);
+        User user = this.userService.GetUserById(id);
         this.productService.PlaceOrder(user, session, receiverName, receiverAddress, receiverPhone);
         return "client/cart/Ordersuccess";
-    }
-
-    @GetMapping("/myProduct/create")
-    public String getProduct(Model model) {
-        model.addAttribute("newProduct", new Product());
-        return "client/myProduct/create";
-    }
-
-    @PostMapping("/myProduct/create")
-    public String postMethodName(@ModelAttribute("newProduct") @Valid Product product,
-            BindingResult bindingResult,
-            @RequestParam("MinhTriFile") MultipartFile file, HttpServletRequest httpServletRequest) {
-        HttpSession httpSession = httpServletRequest.getSession(false);
-        Long id = (Long) httpSession.getAttribute("id");
-        User user = this.userService.GetUserById(id);
-        List<FieldError> errors = bindingResult.getFieldErrors();
-        for (FieldError error : errors) {
-            System.out.println(error.getField() + " - " + error.getDefaultMessage());
-        }
-
-        if (bindingResult.hasErrors())
-            return "client/myProduct/create";
-        String avatar = this.uploadService.handleSaveUpLoadFile(file, "product");
-        product.setImage(avatar);
-        product.setUser(user);
-        if (user.getRole().getName().equals("ADMIN"))
-            product.setStatus("Đã duyệt");
-        else
-            product.setStatus("Chờ xử lý");
-        product.setSold(0);
-        this.productService.HandleSaveProduct(product);
-        return "redirect:/myProduct";
-    }
-
-    @GetMapping("/myProduct")
-    public String getMyProduct(Model model, HttpServletRequest request,
-            @RequestParam(value = "page", defaultValue = "1") int page) {
-        Pageable pageable = PageRequest.of(page - 1, 8,
-                Sort.by(Product_.STATUS).ascending().and(Sort.by(Order_.ID).descending()));
-        HttpSession session = request.getSession(false);
-        Long id = (Long) session.getAttribute("id");
-        User user = this.userService.GetUserById(id);
-        Page<Product> productPage = this.productService.GetAllProduct(user, pageable);
-        List<Product> products = productPage.getContent();
-        model.addAttribute("products", products);
-        model.addAttribute("sumPage", productPage.getTotalPages());
-        model.addAttribute("nowPage", page);
-        return "client/myProduct/show";
-    }
-
-    @PostMapping("/myProduct/preUpdate/{id}")
-    public String postpreUpate(@RequestParam("quantity") long quantity, @PathVariable("id") long id) {
-        Optional<Product> prOptional = this.productService.fetchProductById(id);
-        if (prOptional.isPresent()) {
-            Product product = prOptional.get();
-            product.setQuantity(quantity);
-            this.productService.HandleSaveProduct(product);
-        }
-        return "redirect:/myProduct";
-    }
-
-    @PostMapping("/myProduct/delete/{id}")
-    public String postMethodName(@PathVariable("id") long id) {
-        Optional<Product> product = this.productService.fetchProductById(id);
-        if (product.isPresent()) {
-            Product realProduct = product.get();
-            if (realProduct.getStatus().equals("Đã duyệt")) {
-                List<CartDetail> CartDetails = this.productService.findCartDetailByProduct(realProduct);
-                if (CartDetails != null) {
-                    for (CartDetail cartDetail : CartDetails) {
-                        this.productService.RemoveProductWithCartDetail(cartDetail);
-                    }
-                }
-            } else
-                this.productService.deleteProduct(realProduct);
-        }
-        this.productService.deleteProduct(id);
-        return "redirect:/myProduct";
-    }
-
-    @GetMapping("/myProduct/update/{id}")
-    public String getUpdateProductPage(Model model, @PathVariable long id) {
-        Optional<Product> currentProduct = this.productService.fetchProductById(id);
-        model.addAttribute("newProduct", currentProduct.get());
-        return "client/myProduct/update";
-    }
-
-    @PostMapping("/myProduct/update")
-    public String handleUpdateProduct(@ModelAttribute("newProduct") @Valid Product pr,
-            BindingResult newProductBindingResult,
-            @RequestParam("MinhtriFile") MultipartFile file) {
-
-        // validate
-        if (newProductBindingResult.hasErrors()) {
-            return "myProduct/update";
-        }
-
-        Product currentProduct = this.productService.fetchProductById(pr.getId()).get();
-        if (currentProduct != null) {
-            if (!file.isEmpty()) {
-                String img = this.uploadService.handleSaveUpLoadFile(file, "product");
-                currentProduct.setImage(img);
-            }
-
-            currentProduct.setName(pr.getName());
-            currentProduct.setPrice(pr.getPrice());
-            currentProduct.setQuantity(pr.getQuantity());
-            currentProduct.setDetailDesc(pr.getDetailDesc());
-            currentProduct.setShortDesc(pr.getShortDesc());
-            currentProduct.setFactory(pr.getFactory());
-            currentProduct.setTarget(pr.getTarget());
-            currentProduct.setStatus("Chờ xử lý");
-            this.productService.HandleSaveProduct(currentProduct);
-        }
-
-        return "redirect:/myProduct";
     }
 
     @GetMapping("/Order-History")
     public String getMethodName(HttpServletRequest request, Model model,
             @RequestParam(value = "page", defaultValue = "1") int page) {
+        this.orderSevice.DoiTrangThaiOrder(); // Thay đổi trạng thái các order nào mà đã giao tất cả sản phẩn thành đã
+                                              // hoàn thành
         HttpSession session = request.getSession(false);
         User user = new User();
         long id = (long) session.getAttribute("id");
@@ -342,4 +235,12 @@ public class ItemController {
         this.reviewService.deleteReview(id);
         return "redirect:/product/" + idProduct;
     }
+
+    @GetMapping("/search")
+    public String getMethodName(@RequestParam(value = "name", defaultValue = "") String name, Model model) {
+        List<Product> products = this.productService.search(name);
+        model.addAttribute("products", products);
+        return "client/search/show";
+    }
+
 }

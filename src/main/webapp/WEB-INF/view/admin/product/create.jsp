@@ -87,9 +87,9 @@
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Dòng cá:</label>
                                                     <form:select class="form-select" path="factory">
-                                                        <form:option value="APPLE">Gosanke</form:option>
-                                                        <form:option value="ASUS">Utsurimono</form:option>
-                                                        <form:option value="LENOVO">Hikarimono</form:option>
+                                                        <form:option value="Gosanke">Gosanke</form:option>
+                                                        <form:option value="Utsurimono">Utsurimono</form:option>
+                                                        <form:option value="Hikarimono">Hikarimono</form:option>
                                                     </form:select>
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">

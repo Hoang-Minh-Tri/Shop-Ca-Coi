@@ -26,6 +26,18 @@ public class OrderDetail {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    private String status;
+
+    public String getUserNameBuy() {
+        return userNameBuy;
+    }
+
+    public void setUserNameBuy(String userNameBuy) {
+        this.userNameBuy = userNameBuy;
+    }
+
+    private String userNameBuy; // Người mua
+
     public long getId() {
         return id;
     }
@@ -64,6 +76,14 @@ public class OrderDetail {
 
     public void setProductOrderDetail(ProductOrderDetail productOrderDetail) {
         this.productOrderDetail = productOrderDetail;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

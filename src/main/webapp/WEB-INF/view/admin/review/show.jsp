@@ -44,28 +44,43 @@
                                                         <th>Người đánh giá</th>
                                                         <th>Thời gian</th>
                                                         <th>Chi tiết</th>
+                                                        <th>Số sao</th>
                                                         <th>Trạng thái</th>
                                                         <th>Chức năng xử lý </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <c:forEach var="review" items="${reviews}">
-                                                        <tr>
-                                                            <th>${review.id}</th>
-                                                            <td>${review.product.name}</td>
-                                                            <td>${review.user.fullName}</td>
-                                                            <td>${review.date}</td>
-                                                            <td>${review.assessment}</td>
-                                                            <td>${review.status}</td>
-                                                            <td>
-                                                                <c:if test="${review.status eq 'Chưa xử lý'}">
-                                                                    <a href="/admin/review/check/${review.id}"
-                                                                        class="btn btn-warning  mx-2">Đã kiểm tra</a>
-                                                                </c:if>
-                                                                <a href="/admin/review/delete/${review.id}"
-                                                                    class="btn btn-danger">Xóa</a>
-                                                            </td>
-                                                        </tr>
+                                                        <c:if test="${review.star > 3}">
+                                                            <tr style="background-color: rgb(95, 201, 118);">
+                                                                <th>${review.id}</th>
+                                                                <td>${review.product.name}</td>
+                                                                <td>${review.user.fullName}</td>
+                                                                <td>${review.date}</td>
+                                                                <td>${review.assessment}</td>
+                                                                <td>${review.star}</td>
+                                                                <td>${review.status}</td>
+                                                                <td>
+                                                                    <a href="/admin/review/delete/${review.id}"
+                                                                        class="btn btn-danger">Xóa</a>
+                                                                </td>
+                                                            </tr>
+                                                        </c:if>
+                                                        <c:if test="${review.star < 4}">
+                                                            <tr style="background-color: rgb(219, 146, 93);">
+                                                                <th>${review.id}</th>
+                                                                <td>${review.product.name}</td>
+                                                                <td>${review.user.fullName}</td>
+                                                                <td>${review.date}</td>
+                                                                <td>${review.assessment}</td>
+                                                                <td>${review.star}</td>
+                                                                <td>${review.status}</td>
+                                                                <td>
+                                                                    <a href="/admin/review/delete/${review.id}"
+                                                                        class="btn btn-danger">Xóa</a>
+                                                                </td>
+                                                            </tr>
+                                                        </c:if>
 
                                                     </c:forEach>
 

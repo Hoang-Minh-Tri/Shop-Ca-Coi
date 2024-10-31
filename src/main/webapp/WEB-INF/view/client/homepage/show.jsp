@@ -108,12 +108,12 @@
                                                                 style="top: 10px; left: 10px;">Koi</div>
                                                             <div
                                                                 class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                                <h4 style="font-size: 15px;">
+                                                                <h4 style="font-size: 18px;">
                                                                     <a href="/product/${product.id}">
                                                                         ${product.name}
                                                                     </a>
-
                                                                 </h4>
+
                                                                 <p style="font-size: 13px;">${product.shortDesc}</p>
                                                                 <div
                                                                     class="d-flex  flex-lg-wrap justify-content-center flex-column">
@@ -122,21 +122,10 @@
                                                                         <fmt:formatNumber type="number"
                                                                             value="${product.price}" /> đ
                                                                     </p>
-                                                                    <form action="/addProductToCart/${product.id}"
-                                                                        method="post">
-                                                                        <div>
-                                                                            <input type="hidden"
-                                                                                name="${_csrf.parameterName}"
-                                                                                value="${_csrf.token}" />
-                                                                        </div>
-                                                                        <button
-                                                                            class="mx-auto btn border border-secondary rounded-pill px-3 text-primary">
-                                                                            <i
-                                                                                class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                            Thêm vào giỏ hàng
-                                                                        </button>
-                                                                    </form>
                                                                 </div>
+                                                                <p
+                                                                    style="font-size: 15px; font-weight: bold; color: black;">
+                                                                    ${product.user.fullName}</p>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -65,6 +65,7 @@
                                 <div class="row g-4 fruite">
                                     <div class="col-12 col-md-4">
                                         <div class="row g-4">
+
                                             <div class="col-12" id="factoryFilter">
                                                 <div class="mb-2"><b>Thể loại</b></div>
                                                 <div class="form-check form-check-inline">
@@ -197,16 +198,21 @@
                                                                         value="${product.price}" />
                                                                     đ
                                                                 </p>
-                                                                <form action="/addProductToCart/${product.id}"
-                                                                    method="post">
-                                                                    <input type="hidden" name="${_csrf.parameterName}"
-                                                                        value="${_csrf.token}" />
-                                                                    <button
-                                                                        class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"><i
-                                                                            class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                        Thêm vào giỏ hàng
-                                                                    </button>
-                                                                </form>
+                                                                <c:if
+                                                                    test="${product.user.email ne sessionScope.email}">
+                                                                    <form action="/addProductToCart/${product.id}"
+                                                                        method="post">
+                                                                        <input type="hidden"
+                                                                            name="${_csrf.parameterName}"
+                                                                            value="${_csrf.token}" />
+                                                                        <button
+                                                                            class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"><i
+                                                                                class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                            Thêm vào giỏ hàng
+                                                                        </button>
+                                                                    </form>
+                                                                </c:if>
+
                                                             </div>
                                                         </div>
                                                     </div>

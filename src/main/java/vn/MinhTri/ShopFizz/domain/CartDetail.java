@@ -30,6 +30,8 @@ public class CartDetail {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    private String status;
+
     public long getId() {
         return id;
     }
@@ -68,6 +70,14 @@ public class CartDetail {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

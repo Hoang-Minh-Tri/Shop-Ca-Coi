@@ -23,12 +23,11 @@ public class RegisterValidator implements ConstraintValidator<RegisterCheck, Dto
                     .addConstraintViolation().disableDefaultConstraintViolation();
             valid = false;
         }
-        if (this.userService.CheckEmailExits(user.getEmail()))
-            if (user.getPassword().equals(user.getConfirmPassword())) {
-                context.buildConstraintViolationWithTemplate("email đã tồn tại").addPropertyNode("email")
-                        .addConstraintViolation().disableDefaultConstraintViolation();
-                valid = false;
-            }
+        if (this.userService.CheckEmailExits(user.getEmail())) {
+            context.buildConstraintViolationWithTemplate("email đã tồn tại").addPropertyNode("email")
+                    .addConstraintViolation().disableDefaultConstraintViolation();
+            valid = false;
+        }
         return valid;
     }
 

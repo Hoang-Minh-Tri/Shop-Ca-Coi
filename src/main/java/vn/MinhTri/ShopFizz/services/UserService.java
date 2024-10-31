@@ -93,4 +93,11 @@ public class UserService {
     public Page<User> GetAllUserPage(Pageable pageable) {
         return this.userRepository.findAll(pageable);
     }
+
+    public boolean CheckEmailandFullName(String email, String fullName) {
+        User user = this.userRepository.findByEmail(email);
+        if (user.getFullName().equals(fullName))
+            return true;
+        return false;
+    }
 }
