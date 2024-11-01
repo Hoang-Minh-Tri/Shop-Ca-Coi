@@ -42,7 +42,8 @@
                                             </div>
                                         </li>
                                         <li><a class="dropdown-item" href="/seller">Trang dành cho người bán</a></li>
-                                        <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="/client/user/update/${sessionScope.id}">Quản
+                                                lý tài khoản</a></li>
 
                                         <li><a class="dropdown-item" href="/Order-History">Lịch sử mua hàng</a></li>
                                         <li>

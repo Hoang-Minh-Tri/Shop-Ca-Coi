@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.MinhTri.ShopFizz.domain.Cart;
 import vn.MinhTri.ShopFizz.domain.CartDetail;
@@ -16,16 +17,14 @@ import vn.MinhTri.ShopFizz.domain.Product;
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.domain.dto.DtoRegister;
 import vn.MinhTri.ShopFizz.domain.dto.Forgot;
-import vn.MinhTri.ShopFizz.repository.CartDetailsRepository;
-import vn.MinhTri.ShopFizz.repository.CartRepository;
 import vn.MinhTri.ShopFizz.services.ProductService;
+import vn.MinhTri.ShopFizz.services.UploadService;
 import vn.MinhTri.ShopFizz.services.UserService;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -36,16 +35,14 @@ public class HomePageController {
     private final ProductService productService;
     private final UserService userService;
     private PasswordEncoder passwordEncoder;
-    private CartRepository cartRepository;
-    private CartDetailsRepository cartDetailsRepository;
+    private UploadService uploadService;
 
     public HomePageController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder,
-            CartRepository cartRepository, CartDetailsRepository cartDetailsRepository) {
+            UploadService uploadService) {
         this.productService = productService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-        this.cartRepository = cartRepository;
-        this.cartDetailsRepository = cartDetailsRepository;
+        this.uploadService = uploadService;
     }
 
     @GetMapping("/")
@@ -130,5 +127,30 @@ public class HomePageController {
         user.setPassword(hashPass);
         this.userService.HandleSaveUser(user);
         return "redirect:/login";
+    }
+
+    @GetMapping("/client/user/update/{id}")
+    public String getUpdatePage(Model model, @PathVariable("id") long id) {
+        User user = this.userService.GetUserById(id);
+        model.addAttribute("newUser", user);
+        return "client/profile/show";
+    }
+
+    @PostMapping("/client/user/update")
+    public String postUpdateUser(@ModelAttribute("newUser") User user,
+            @RequestParam("MinhTriFile") MultipartFile file, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        User newUser = this.userService.GetUserById(user.getId());
+        String avatar = this.uploadService.handleSaveUpLoadFile(file, "avatar");
+        if (newUser != null) {
+            newUser.setAddress(user.getAddress());
+            newUser.setEmail(user.getEmail());
+            newUser.setFullName(user.getFullName());
+            newUser.setPhone(user.getPhone());
+            newUser.setAvatar(avatar);
+            session.setAttribute("avatar", avatar); // Cập nhật lại avatar cho session hiển thị trên thanh header
+            this.userService.HandleSaveUser(newUser);
+        }
+        return "redirect:/";
     }
 }
