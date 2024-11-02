@@ -93,7 +93,7 @@
                                                     </form:select>
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">Thể loại:</label>
+                                                    <label class="form-label">Chất lượng:</label>
                                                     <form:select class="form-select" path="target">
                                                         <form:option value="Loại 1">Loại 1</form:option>
                                                         <form:option value="Loại 2">Loại 2

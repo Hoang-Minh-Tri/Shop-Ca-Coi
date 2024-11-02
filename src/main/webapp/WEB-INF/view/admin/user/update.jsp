@@ -89,8 +89,6 @@
                                                         accept=".png, .jpg, .jpeg" name="MinhTriFile" />
                                                 </div>
                                                 <div class="col-12 mb-3">
-
-
                                                     <img style="max-height: 250px; display: none;" alt="avatar preview"
                                                         id="avatarPreview" />
                                                 </div>

@@ -45,34 +45,65 @@
                                                             <th>Tên sản phẩm</th>
                                                             <th>Số lượng</th>
                                                             <th>Tổng số tiền</th>
+                                                            <th>Thời gian</th>
                                                             <th>Trạng thái</th>
                                                             <th>Chức Năng</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <c:forEach var="orderDetail" items="${orderDetails}">
-                                                            <tr style="text-align: center;">
-                                                                <th>${orderDetail.id}</th>
+                                                            <c:if test="${orderDetail.status eq 'Đã giao'}">
+                                                                <tr
+                                                                    style="text-align: center; background-color: rgb(79, 158, 69);">
+                                                                    <th>${orderDetail.id}</th>
+                                                                    <td>${orderDetail.userNameBuy}</td>
+                                                                    <td>${orderDetail.quantity}</td>
+                                                                    <td>
+                                                                        <fmt:formatNumber type="number"
+                                                                            value="${orderDetail.price * orderDetail.quantity}" />
+                                                                        đ
+                                                                    </td>
 
-                                                                <td>${orderDetail.productOrderDetail.name}</td>
-                                                                <td>${orderDetail.quantity}</td>
-                                                                <td>
-                                                                    <fmt:formatNumber type="number"
-                                                                        value="${orderDetail.price * orderDetail.quantity}" />
-                                                                    đ
-                                                                </td>
-                                                                <td>${orderDetail.userNameBuy}</td>
-                                                                <td>${orderDetail.status}</td>
-                                                                <td>
-                                                                    <c:if test="${orderDetail.status eq 'Chờ xử lý'}">
-                                                                        <a href="/seller/order/agree/${orderDetail.id}"
-                                                                            class="btn btn-warning  mx-2">Giao</a>
-                                                                        <a href="/seller/order/delete/${orderDetail.id}"
-                                                                            class="btn btn-danger">Xóa</a>
-                                                                    </c:if>
+                                                                    <td>${orderDetail.date}</td>
+                                                                    <td>${orderDetail.status}</td>
+                                                                    <td>
+                                                                        <c:if
+                                                                            test="${orderDetail.status eq 'Chờ xử lý'}">
+                                                                            <a href="/seller/order/agree/${orderDetail.id}"
+                                                                                class="btn btn-warning  mx-2">Giao</a>
+                                                                            <a href="/seller/order/delete/${orderDetail.id}"
+                                                                                class="btn btn-danger">Xóa</a>
+                                                                        </c:if>
 
-                                                                </td>
-                                                            </tr>
+                                                                    </td>
+                                                                </tr>
+                                                            </c:if>
+                                                            <c:if test="${orderDetail.status ne 'Đã giao'}">
+                                                                <tr style="text-align: center;">
+                                                                    <th>${orderDetail.id}</th>
+                                                                    <td>${orderDetail.userNameBuy}</td>
+                                                                    <td>${orderDetail.quantity}</td>
+                                                                    <td>
+                                                                        <fmt:formatNumber type="number"
+                                                                            value="${orderDetail.price * orderDetail.quantity}" />
+                                                                        đ
+                                                                    </td>
+
+                                                                    <td>${orderDetail.date}</td>
+                                                                    <td>${orderDetail.status}</td>
+                                                                    <td>
+                                                                        <c:if
+                                                                            test="${orderDetail.status eq 'Chờ xử lý'}">
+                                                                            <a href="/seller/order/agree/${orderDetail.id}"
+                                                                                class="btn btn-warning  mx-2">Giao</a>
+                                                                            <a href="/seller/order/delete/${orderDetail.id}"
+                                                                                class="btn btn-danger">Xóa</a>
+                                                                        </c:if>
+
+                                                                    </td>
+                                                                </tr>
+                                                            </c:if>
+
 
                                                         </c:forEach>
 

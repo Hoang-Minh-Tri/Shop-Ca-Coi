@@ -1,18 +1,30 @@
 package vn.MinhTri.ShopFizz.services;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import vn.MinhTri.ShopFizz.domain.CartDetail;
+import vn.MinhTri.ShopFizz.domain.Product;
 import vn.MinhTri.ShopFizz.domain.Review;
+import vn.MinhTri.ShopFizz.domain.User;
+import vn.MinhTri.ShopFizz.repository.CartDetailsRepository;
+import vn.MinhTri.ShopFizz.repository.ProductRepository;
 import vn.MinhTri.ShopFizz.repository.ReviewRepository;
 
 @Service
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final ProductRepository productRepository;
+    private final CartDetailsRepository cartDetailsRepository;
 
-    public ReviewService(ReviewRepository reviewRepository) {
+    public ReviewService(ReviewRepository reviewRepository, ProductRepository productRepository,
+            CartDetailsRepository cartDetailsRepository) {
         this.reviewRepository = reviewRepository;
+        this.productRepository = productRepository;
+        this.cartDetailsRepository = cartDetailsRepository;
     }
 
     // Lưu các đánh giá
@@ -49,5 +61,12 @@ public class ReviewService {
     // Lấy các đánh giá của sản phẩm do mình bán
     public Page<Review> GetReviewByMyProduct(long id, Pageable pageable) {
         return this.reviewRepository.findReviewByProduct(id, pageable);
+    }
+
+    public void DeleteByUser(User user) {
+        List<Review> reviews = this.reviewRepository.findByUser(user);
+        for (Review review : reviews) {
+            this.reviewRepository.delete(review);
+        }
     }
 }

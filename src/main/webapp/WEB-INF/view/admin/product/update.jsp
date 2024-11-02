@@ -45,14 +45,14 @@
                             <div class="container-fluid px-4">
                                 <h1 class="mt-4">Products</h1>
                                 <ol class="breadcrumb mb-4">
-                                    <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="/admin/product">Product</a></li>
-                                    <li class="breadcrumb-item active">Update</li>
+                                    <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                    <li class="breadcrumb-item"><a href="/admin/product">Sản phẩm</a></li>
+                                    <li class="breadcrumb-item active">Cập nhật</li>
                                 </ol>
                                 <div class=" mt-5">
                                     <div class="row">
                                         <div class="col-md-6 col-12 mx-auto">
-                                            <h3>Update a product</h3>
+                                            <h3>Cập nhật sản phẩm</h3>
                                             <hr />
                                             <form:form method="post" action="/admin/product/update" class="row"
                                                 enctype="multipart/form-data" modelAttribute="newProduct">
@@ -78,35 +78,35 @@
                                                 </div>
 
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">Name:</label>
+                                                    <label class="form-label">Tên sản phẩm:</label>
                                                     <form:input type="text"
                                                         class="form-control ${not empty errorName ? 'is-invalid' : ''}"
                                                         path="name" />
                                                     ${errorName}
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">Price:</label>
+                                                    <label class="form-label">Gía:</label>
                                                     <form:input type="number"
                                                         class="form-control ${not empty errorPrice ? 'is-invalid' : ''}"
                                                         path="price" />
                                                     ${errorPrice}
                                                 </div>
                                                 <div class="mb-3 col-12">
-                                                    <label class="form-label">Detail description:</label>
+                                                    <label class="form-label">Miêu tả sản phẩm:</label>
                                                     <form:textarea type="text"
                                                         class="form-control ${not empty errorDetailDesc ? 'is-invalid' : ''}"
                                                         path="detailDesc" />
                                                     ${errorDetailDesc}
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">Short description:</label>
+                                                    <label class="form-label">Miêu tả ngắn gọn:</label>
                                                     <form:input type="text"
                                                         class="form-control ${not empty errorShortDesc ? 'is-invalid' : ''}"
                                                         path="shortDesc" />
                                                     ${errorShortDesc}
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">Quantity:</label>
+                                                    <label class="form-label">Số lượng:</label>
                                                     <form:input type="number"
                                                         class="form-control ${not empty errorQuantity ? 'is-invalid' : ''}"
                                                         path="quantity" />
@@ -114,7 +114,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">Factory:</label>
+                                                    <label class="form-label">Thể loại:</label>
                                                     <form:select class="form-select" path="factory">
                                                         <form:option value="Gosanke">Gosanke</form:option>
                                                         <form:option value="Utsurimono">Utsurimono</form:option>
@@ -122,7 +122,7 @@
                                                     </form:select>
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">Target:</label>
+                                                    <label class="form-label">Xếp loại:</label>
                                                     <form:select class="form-select" path="target">
                                                         <form:option value="Loai 1">Loại 1</form:option>
                                                         <form:option value="Loai 2">Loại 2
@@ -132,7 +132,7 @@
                                                     </form:select>
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label for="avatarFile" class="form-label">Image:</label>
+                                                    <label for="avatarFile" class="form-label">Ảnh:</label>
                                                     <input class="form-control" type="file" id="avatarFile"
                                                         accept=".png, .jpg, .jpeg" name="hoidanitFile" />
                                                 </div>
@@ -141,7 +141,7 @@
                                                         id="avatarPreview" />
                                                 </div>
                                                 <div class="col-12 mb-5">
-                                                    <button type="submit" class="btn btn-warning">Update</button>
+                                                    <button type="submit" class="btn btn-warning">Cập nhật</button>
                                                 </div>
                                             </form:form>
 

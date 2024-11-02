@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,7 +19,7 @@ public class OrderDetail {
     private long quantity;
     private double price;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "productOrderDetail_id")
     private ProductOrderDetail productOrderDetail;
 
@@ -31,6 +32,8 @@ public class OrderDetail {
     public String getUserNameBuy() {
         return userNameBuy;
     }
+
+    public String date;
 
     public void setUserNameBuy(String userNameBuy) {
         this.userNameBuy = userNameBuy;
@@ -84,6 +87,14 @@ public class OrderDetail {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
 }

@@ -26,6 +26,8 @@ import vn.MinhTri.ShopFizz.repository.ProductOrderRepository;
 import vn.MinhTri.ShopFizz.repository.ProductRepository;
 import vn.MinhTri.ShopFizz.repository.ReviewRepository;
 import vn.MinhTri.ShopFizz.services.Specification.ProductSpec;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class ProductService {
@@ -246,6 +248,9 @@ public class ProductService {
 
         Cart cart = this.cartRepository.findByUser(user);
         List<CartDetail> cartDetails;
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = currentDate.format(formatter);
         if (cart != null) {
             cartDetails = cart.getCartDetails();
             if (cartDetails != null) {
@@ -256,6 +261,8 @@ public class ProductService {
                 order.setReceiverName(receiverName);
                 order.setReceiverPhone(receiverPhone);
                 order.setStatus("Chưa hoàn thành");
+                order.setDate(formattedDate);
+
                 long sum = 0;
                 for (CartDetail cd : cartDetails) {
                     sum += (cd.getQuantity() * cd.getPrice());
@@ -287,6 +294,7 @@ public class ProductService {
                     orderDetail.setQuantity(cd.getQuantity());
                     orderDetail.setStatus("Chờ xử lý");
                     orderDetail.setUserNameBuy(user.getFullName());
+                    orderDetail.setDate(formattedDate);
                     this.orderDetailRepository.save(orderDetail);
                 }
 
@@ -363,5 +371,19 @@ public class ProductService {
 
     public List<Product> search(String name) {
         return this.productRepository.findAll(ProductSpec.nameLike(name));
+    }
+
+    public void deleteByUser(User user) {
+        List<Product> products = this.productRepository.findByUser(user);
+        for (Product product : products) {
+            List<CartDetail> cartDetails = this.cartDetailsRepository.findByProduct(product);
+            for (CartDetail cartDetail : cartDetails)
+                this.cartDetailsRepository.delete(cartDetail);
+            List<Review> reviews = product.getReviews();
+            for (Review review : reviews) {
+                this.reviewRepository.delete(review);
+            }
+            this.productRepository.delete(product);
+        }
     }
 }

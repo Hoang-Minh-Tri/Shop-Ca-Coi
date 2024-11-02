@@ -33,6 +33,8 @@ public class Order {
     @OneToMany(mappedBy = "order")
     List<OrderDetail> orderDetails;
 
+    private String date;
+
     // user id
 
     public String getReceiverName() {
@@ -102,6 +104,14 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
 }

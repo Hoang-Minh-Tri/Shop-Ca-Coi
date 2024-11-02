@@ -13,9 +13,11 @@ import vn.MinhTri.ShopFizz.repository.OrderRepository;
 @Service
 public class OrderSevice {
     private final OrderRepository orderRepository;
+    private final OrderDetailService orderDetailService;
 
-    public OrderSevice(OrderRepository orderRepository) {
+    public OrderSevice(OrderRepository orderRepository, OrderDetailService orderDetailService) {
         this.orderRepository = orderRepository;
+        this.orderDetailService = orderDetailService;
     }
 
     public Page<Order> GetAllOrderPage(Pageable pageable) {
@@ -44,4 +46,13 @@ public class OrderSevice {
         }
     }
 
+    public void DeleteByUser(User user) {
+        List<Order> orders = this.orderRepository.findByUser(user);
+        for (Order order : orders) {
+            List<OrderDetail> orderDetails = this.orderDetailService.GetOrderDetailsByOrder(order);
+            for (OrderDetail orderDetail : orderDetails)
+                this.orderDetailService.Delete(orderDetail);
+            this.orderRepository.delete(order);
+        }
+    }
 }

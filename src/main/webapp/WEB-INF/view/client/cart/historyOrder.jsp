@@ -81,7 +81,8 @@
                                     </c:if>
                                     <c:forEach var="order" items="${orders}">
                                         <tr>
-                                            <td colspan="4" style="color: #0f60f5;">Mã đặt đơn = ${order.id}</td>
+                                            <td colspan="3" style="color: #0f60f5;">Mã đặt đơn = ${order.id}</td>
+                                            <td colspan="1">${order.date}</td>
                                             <td colspan="1" style="color:gold">
                                                 <fmt:formatNumber type="number" value=" ${order.totalPrice}" />
                                                 đ

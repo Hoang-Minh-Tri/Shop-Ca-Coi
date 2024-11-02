@@ -15,6 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import vn.MinhTri.ShopFizz.domain.User;
+import vn.MinhTri.ShopFizz.services.CartService;
+import vn.MinhTri.ShopFizz.services.OrderSevice;
+import vn.MinhTri.ShopFizz.services.ProductService;
+import vn.MinhTri.ShopFizz.services.ReviewService;
 import vn.MinhTri.ShopFizz.services.UploadService;
 import vn.MinhTri.ShopFizz.services.UserService;
 
@@ -23,13 +27,22 @@ public class UserController {
 
     private final UserService userService;
     private final UploadService uploadService;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final ReviewService reviewService;
+    private final CartService cartService;
+    private final OrderSevice orderService;
+    private final ProductService productService;
 
-    public UserController(UserService userService, UploadService uploadService,
-            PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, UploadService uploadService, PasswordEncoder passwordEncoder,
+            ReviewService reviewService, CartService cartService, OrderSevice orderService,
+            ProductService productService) {
         this.userService = userService;
         this.uploadService = uploadService;
         this.passwordEncoder = passwordEncoder;
+        this.reviewService = reviewService;
+        this.cartService = cartService;
+        this.orderService = orderService;
+        this.productService = productService;
     }
 
     @GetMapping("/admin/user")
@@ -110,9 +123,13 @@ public class UserController {
 
     @PostMapping("/admin/user/delete")
     public String postDeleteUser(@ModelAttribute("newUser") User user) {
-        if (user != null)
+        if (user != null) {
+            this.reviewService.DeleteByUser(user);
+            this.cartService.DeleteByUser(user);
+            this.orderService.DeleteByUser(user);
+            this.productService.deleteByUser(user);
             this.userService.DeleteAUser(user);
-
+        }
         return "redirect:/admin/user";
     }
 
