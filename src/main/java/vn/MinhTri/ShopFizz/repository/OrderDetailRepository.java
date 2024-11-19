@@ -18,4 +18,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
     List<OrderDetail> findByOrder(Order order);
 
+    @Query("select sum(price * quantity) from OrderDetail")
+    float sumOrder();
 }

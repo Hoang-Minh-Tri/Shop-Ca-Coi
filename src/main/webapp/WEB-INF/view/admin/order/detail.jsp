@@ -45,7 +45,7 @@
                                                     <li class="list-group-item">ID: ${order.id}</li>
                                                     <li class="list-group-item">Tổng số tiền: ${order.totalPrice}</li>
                                                     <li class="list-group-item">Người đặt: ${order.user.fullName}</li>
-                                                    <li class="list-group-item">Trạng thái: ${oorrder.status}</li>
+                                                    <li class="list-group-item">Trạng thái: ${order.status}</li>
                                                 </ul>
                                             </div>
                                             <a href="/admin/order" class="btn btn-success mt-3">Trở về</a>

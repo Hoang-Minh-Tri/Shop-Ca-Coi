@@ -235,7 +235,7 @@
                                                             placeholder="Miêu tả đánh giá:" spellcheck="false"
                                                             name="assessment" type="text"></textarea>
                                                     </div>
-                                                    <input type="text" id="ratingInput" name="star" value="1" />
+                                                    <input type="hidden" id="ratingInput" name="star" value="1" />
                                                 </div>
                                             </div>
                                             <button

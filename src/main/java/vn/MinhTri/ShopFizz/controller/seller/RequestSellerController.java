@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Order_;
 import vn.MinhTri.ShopFizz.domain.Product;
+import vn.MinhTri.ShopFizz.domain.Review;
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.services.ProductService;
+import vn.MinhTri.ShopFizz.services.ReviewService;
 import vn.MinhTri.ShopFizz.services.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,9 +36,13 @@ public class RequestSellerController {
     private final ProductService productService;
     private final UserService userService;
 
-    public RequestSellerController(ProductService productService, UserService userService) {
+    private final ReviewService reviewService;
+
+    public RequestSellerController(ProductService productService, UserService userService,
+            ReviewService reviewService) {
         this.productService = productService;
         this.userService = userService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("/seller/request")
@@ -74,8 +81,24 @@ public class RequestSellerController {
     }
 
     @PostMapping("/seller/request/delete")
-    public String postDeleteRequest(@ModelAttribute("newProduct") Product product) {
-        Long id = product.getId();
+    public String postDeleteRequest(@ModelAttribute("newProduct") Product pr) {
+        Long id = pr.getId();
+        List<CartDetail> CartDetails = this.productService.findCartDetailByProduct(pr);
+        if (CartDetails != null) {
+            for (CartDetail cartDetail : CartDetails) {
+                this.productService.RemoveProductWithCartDetail(cartDetail);
+            }
+        }
+        Optional<Product> productOp = this.productService.fetchProductById(pr.getId());
+        if (productOp.isPresent()) {
+            Product product = productOp.get();
+            List<Review> reviews = product.getReviews();
+            for (Review review : reviews) {
+                this.reviewService.Delete(review);
+            }
+
+        }
+
         Optional<Product> nowProduct = this.productService.fetchProductById(id);
         if (nowProduct.isPresent()) {
             Product realProduct = nowProduct.get();

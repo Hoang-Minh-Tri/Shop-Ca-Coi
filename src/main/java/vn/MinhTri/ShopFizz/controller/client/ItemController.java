@@ -28,15 +28,14 @@ import vn.MinhTri.ShopFizz.services.ProductService;
 import vn.MinhTri.ShopFizz.services.ReviewService;
 import vn.MinhTri.ShopFizz.services.UploadService;
 import vn.MinhTri.ShopFizz.services.UserService;
+import vn.MinhTri.ShopFizz.services.mailService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,14 +48,16 @@ public class ItemController {
     private final UserService userService;
     private final OrderSevice orderSevice;
     private final ReviewService reviewService;
+    private final mailService mail_Service;
 
     public ItemController(ProductService productService, UploadService uploadService, UserService userService,
-            OrderSevice orderSevice, ReviewService reviewService) {
+            OrderSevice orderSevice, ReviewService reviewService, mailService mail_Service) {
         this.productService = productService;
         this.uploadService = uploadService;
         this.userService = userService;
         this.orderSevice = orderSevice;
         this.reviewService = reviewService;
+        this.mail_Service = mail_Service;
     }
 
     @GetMapping("/products")
@@ -173,9 +174,9 @@ public class ItemController {
             @RequestParam("receiverAddress") String receiverAddress,
             @RequestParam("receiverPhone") String receiverPhone) {
         HttpSession session = request.getSession(false);
-
         long id = (long) session.getAttribute("id");
         User user = this.userService.GetUserById(id);
+        this.mail_Service.sendEmailOrder(user);
         this.productService.PlaceOrder(user, session, receiverName, receiverAddress, receiverPhone);
         return "client/cart/Ordersuccess";
     }
@@ -206,10 +207,12 @@ public class ItemController {
         HttpSession session = request.getSession(false);
         Long idUser = (Long) session.getAttribute("id");
         User user = this.userService.GetUserById(idUser);
+
         Optional<Product> productOp = this.productService.fetchProductById(id);
         if (productOp.isPresent()) {
             Product product = productOp.get();
             Review review = new Review();
+            this.reviewService.sendEmailReview(user, product, assessment, star);
             LocalDate currentDate = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String formattedDate = currentDate.format(formatter);

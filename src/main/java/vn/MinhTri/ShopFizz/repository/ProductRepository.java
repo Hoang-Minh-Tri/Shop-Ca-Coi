@@ -27,5 +27,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.factory = :factory and p.status = 'Đã duyệt'")
     int countByFactory(String factory);
+
     // Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 }

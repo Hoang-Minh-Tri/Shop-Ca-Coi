@@ -14,9 +14,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Order_;
 import vn.MinhTri.ShopFizz.domain.Product;
+import vn.MinhTri.ShopFizz.domain.Review;
 import vn.MinhTri.ShopFizz.services.ProductService;
+import vn.MinhTri.ShopFizz.services.ReviewService;
+import vn.MinhTri.ShopFizz.services.mailService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.Optional;
@@ -26,9 +31,13 @@ import java.util.Optional;
 @Controller
 public class RequestController {
     private final ProductService productService;
+    private final ReviewService reviewService;
+    private final mailService mail_Service;
 
-    public RequestController(ProductService productService) {
+    public RequestController(ProductService productService, ReviewService reviewService, mailService mail_Service) {
         this.productService = productService;
+        this.reviewService = reviewService;
+        this.mail_Service = mail_Service;
     }
 
     @GetMapping("/admin/request")
@@ -68,6 +77,7 @@ public class RequestController {
         Optional<Product> nowProduct = this.productService.fetchProductById(id);
         if (nowProduct.isPresent()) {
             Product realProduct = nowProduct.get();
+            this.mail_Service.sendEmailRequest(realProduct);
             realProduct.setStatus("Đã duyệt");
             this.productService.HandleSaveProduct(realProduct);
         }
@@ -82,11 +92,28 @@ public class RequestController {
     }
 
     @PostMapping("/admin/request/delete")
-    public String postDeleteRequest(@ModelAttribute("newProduct") Product product) {
-        Long id = product.getId();
+    public String postDeleteRequest(@ModelAttribute("newProduct") Product pr) {
+        Long id = pr.getId();
+        List<CartDetail> CartDetails = this.productService.findCartDetailByProduct(pr);
+        if (CartDetails != null) {
+            for (CartDetail cartDetail : CartDetails) {
+                this.productService.RemoveProductWithCartDetail(cartDetail);
+            }
+        }
+        Optional<Product> productOp = this.productService.fetchProductById(pr.getId());
+        if (productOp.isPresent()) {
+            Product product = productOp.get();
+            List<Review> reviews = product.getReviews();
+            for (Review review : reviews) {
+                this.reviewService.Delete(review);
+            }
+
+        }
+
         Optional<Product> nowProduct = this.productService.fetchProductById(id);
         if (nowProduct.isPresent()) {
             Product realProduct = nowProduct.get();
+            this.mail_Service.sendEmailDelete(realProduct);
             this.productService.deleteProduct(realProduct);
         }
         return "redirect:/admin/request";

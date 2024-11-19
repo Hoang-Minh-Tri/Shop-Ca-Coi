@@ -72,7 +72,7 @@ public class HomePageController {
         // }
 
         if (bindingResult.hasErrors())
-            return "/client/auth/register";
+            return "client/auth/register";
         User user = this.userService.registerDtoToUser(dtoRegister);
         String hashPass = this.passwordEncoder.encode(user.getPassword());
         user.setPassword(hashPass);

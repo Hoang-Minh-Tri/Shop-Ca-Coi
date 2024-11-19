@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class DashBoarchControler {
     @GetMapping("/seller")
     public String getPageSeller(Model model) {
-        return "seller/dashboard/show";
+        return "seller/product/show";
     }
 
 }

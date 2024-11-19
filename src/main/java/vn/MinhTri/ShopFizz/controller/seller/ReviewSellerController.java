@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import vn.MinhTri.ShopFizz.domain.Review;
 import vn.MinhTri.ShopFizz.domain.Review_;
 import vn.MinhTri.ShopFizz.services.ReviewService;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +49,7 @@ public class ReviewSellerController {
     @GetMapping("/seller/review/check/{id}")
     public String postCheckReview(@PathVariable("id") long id) {
         Review review = this.reviewService.GetReviewById(id);
+        this.reviewService.sendEmailReviewUser(review);
         review.setStatus("Đã xử lý");
         this.reviewService.Save(review);
         return "redirect:/seller/review?page=1";

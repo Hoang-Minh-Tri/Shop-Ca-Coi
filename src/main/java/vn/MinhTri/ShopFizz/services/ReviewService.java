@@ -19,12 +19,14 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
     private final CartDetailsRepository cartDetailsRepository;
+    private final mailService mail_Service;
 
     public ReviewService(ReviewRepository reviewRepository, ProductRepository productRepository,
-            CartDetailsRepository cartDetailsRepository) {
+            CartDetailsRepository cartDetailsRepository, mailService mail_Service) {
         this.reviewRepository = reviewRepository;
         this.productRepository = productRepository;
         this.cartDetailsRepository = cartDetailsRepository;
+        this.mail_Service = mail_Service;
     }
 
     // Lưu các đánh giá
@@ -69,4 +71,27 @@ public class ReviewService {
             this.reviewRepository.delete(review);
         }
     }
+
+    public void Delete(Review review) {
+        this.reviewRepository.delete(review);
+    }
+
+    public void sendEmailReview(User user, Product product, String assement, int star) {
+        User send = product.getUser();
+        String email = send.getEmail();
+        String text = "Người dùng: " + user.getFullName() + " đã đánh giá sản phẩm " + product.getName() + " " + star
+                + " sao với đánh giá như sau: <br>" + assement
+                + "<br>Hãy kiểm tra lại và phản hồi lại người dùng. Xin cám ơn";
+        this.mail_Service.sendEmail(email, "Đánh giá sản phẩm của bạn", text);
+    }
+
+    public void sendEmailReviewUser(Review review) {
+        User send = review.getUser();
+        String email = send.getEmail();
+        Product product = review.getProduct();
+        String text = "Cám ơn bạn vì phản hồi của bạn về sản phẩm " + product.getName()
+                + "<br> Xin cám ơn";
+        this.mail_Service.sendEmail(email, "Cám ơn vì đã đánh giá sản phẩm", text);
+    }
+
 }

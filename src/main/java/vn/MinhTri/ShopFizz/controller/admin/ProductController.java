@@ -16,8 +16,10 @@ import org.springframework.validation.FieldError;
 
 import vn.MinhTri.ShopFizz.domain.CartDetail;
 import vn.MinhTri.ShopFizz.domain.Product;
+import vn.MinhTri.ShopFizz.domain.Review;
 import vn.MinhTri.ShopFizz.domain.User;
 import vn.MinhTri.ShopFizz.services.ProductService;
+import vn.MinhTri.ShopFizz.services.ReviewService;
 import vn.MinhTri.ShopFizz.services.UploadService;
 import vn.MinhTri.ShopFizz.services.UserService;
 
@@ -34,11 +36,14 @@ public class ProductController {
     private final ProductService productService;
     private final UploadService uploadService;
     private final UserService userService;
+    private final ReviewService reviewService;
 
-    public ProductController(ProductService productService, UploadService uploadService, UserService userService) {
+    public ProductController(ProductService productService, UploadService uploadService, UserService userService,
+            ReviewService reviewService) {
         this.productService = productService;
         this.uploadService = uploadService;
         this.userService = userService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("/admin/product")
@@ -134,6 +139,15 @@ public class ProductController {
             for (CartDetail cartDetail : CartDetails) {
                 this.productService.RemoveProductWithCartDetail(cartDetail);
             }
+        }
+        Optional<Product> productOp = this.productService.fetchProductById(pr.getId());
+        if (productOp.isPresent()) {
+            Product product = productOp.get();
+            List<Review> reviews = product.getReviews();
+            for (Review review : reviews) {
+                this.reviewService.Delete(review);
+            }
+
         }
         this.productService.deleteProduct(pr);
         return "redirect:/admin/product";

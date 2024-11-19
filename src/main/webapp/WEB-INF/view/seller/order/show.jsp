@@ -57,6 +57,7 @@
                                                                     style="text-align: center; background-color: rgb(79, 158, 69);">
                                                                     <th>${orderDetail.id}</th>
                                                                     <td>${orderDetail.userNameBuy}</td>
+                                                                    <td>${orderDetail.productOrderDetail.name}</td>
                                                                     <td>${orderDetail.quantity}</td>
                                                                     <td>
                                                                         <fmt:formatNumber type="number"
@@ -82,6 +83,7 @@
                                                                 <tr style="text-align: center;">
                                                                     <th>${orderDetail.id}</th>
                                                                     <td>${orderDetail.userNameBuy}</td>
+                                                                    <td>${orderDetail.productOrderDetail.name}</td>
                                                                     <td>${orderDetail.quantity}</td>
                                                                     <td>
                                                                         <fmt:formatNumber type="number"

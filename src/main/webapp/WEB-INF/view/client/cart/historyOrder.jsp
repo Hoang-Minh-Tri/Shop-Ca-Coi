@@ -80,6 +80,7 @@
                                         </tr>
                                     </c:if>
                                     <c:forEach var="order" items="${orders}">
+                                        <c:if test="$"></c:if>
                                         <tr>
                                             <td colspan="3" style="color: #0f60f5;">Mã đặt đơn = ${order.id}</td>
                                             <td colspan="1">${order.date}</td>
@@ -92,45 +93,90 @@
                                             </td>
                                         </tr>
                                         <c:forEach var="orderDetail" items="${order.orderDetails}">
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="/images/product/${orderDetail.productOrderDetail.images}"
-                                                            class="img-fluid me-5 rounded-circle"
-                                                            style="width: 80px; height: 80px;" alt="">
-                                                    </div>
-                                                </th>
-                                                <td>
-                                                    <p class="mb-0 mt-4">
-                                                        ${orderDetail.productOrderDetail.name}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 mt-4">
-                                                        <fmt:formatNumber type="number" value="${orderDetail.price}" />
-                                                        đ
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group quantity mt-4" style="width: 100px;">
-                                                        <input type="text"
-                                                            class="form-control form-control-sm text-center border-0"
-                                                            value="${orderDetail.quantity}">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 mt-4" data-cart-detail-id="${cartDetail.id}">
-                                                        <fmt:formatNumber type="number"
-                                                            value="${orderDetail.price * orderDetail.quantity}" /> đ
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 mt-4">
-                                                        ${orderDetail.status}
-                                                    </p>
-                                                </td>
+                                            <c:if test="${orderDetail.status eq 'Đã giao'}">
+                                                <tr style="background-color: rgb(178, 233, 127); color: white;">
+                                                    <th scope="row">
+                                                        <div class="d-flex align-items-center">
+                                                            <img src="/images/product/${orderDetail.productOrderDetail.images}"
+                                                                class="img-fluid me-5 rounded-circle"
+                                                                style="width: 80px; height: 80px;" alt="">
+                                                        </div>
+                                                    </th>
+                                                    <td>
+                                                        <p class="mb-0 mt-4">
+                                                            ${orderDetail.productOrderDetail.name}
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0 mt-4">
+                                                            <fmt:formatNumber type="number"
+                                                                value="${orderDetail.price}" />
+                                                            đ
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group quantity mt-4" style="width: 100px;">
+                                                            <input type="text"
+                                                                class="form-control form-control-sm text-center border-0"
+                                                                value="${orderDetail.quantity}">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0 mt-4" data-cart-detail-id="${cartDetail.id}">
+                                                            <fmt:formatNumber type="number"
+                                                                value="${orderDetail.price * orderDetail.quantity}" /> đ
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0 mt-4">
+                                                            ${orderDetail.status}
+                                                        </p>
+                                                    </td>
 
-                                            </tr>
+                                                </tr>
+                                            </c:if>
+                                            <c:if test="${orderDetail.status ne 'Đã giao'}">
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="d-flex align-items-center">
+                                                            <img src="/images/product/${orderDetail.productOrderDetail.images}"
+                                                                class="img-fluid me-5 rounded-circle"
+                                                                style="width: 80px; height: 80px;" alt="">
+                                                        </div>
+                                                    </th>
+                                                    <td>
+                                                        <p class="mb-0 mt-4">
+                                                            ${orderDetail.productOrderDetail.name}
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0 mt-4">
+                                                            <fmt:formatNumber type="number"
+                                                                value="${orderDetail.price}" />
+                                                            đ
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group quantity mt-4" style="width: 100px;">
+                                                            <input type="text"
+                                                                class="form-control form-control-sm text-center border-0"
+                                                                value="${orderDetail.quantity}">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0 mt-4" data-cart-detail-id="${cartDetail.id}">
+                                                            <fmt:formatNumber type="number"
+                                                                value="${orderDetail.price * orderDetail.quantity}" /> đ
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0 mt-4">
+                                                            ${orderDetail.status}
+                                                        </p>
+                                                    </td>
+
+                                                </tr>
+                                            </c:if>
                                         </c:forEach>
                                     </c:forEach>
                                 </tbody>

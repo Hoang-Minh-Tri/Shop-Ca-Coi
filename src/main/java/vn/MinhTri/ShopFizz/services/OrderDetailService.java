@@ -30,4 +30,8 @@ public class OrderDetailService {
     public void Delete(OrderDetail orderDetail) {
         this.orderDetailRepository.delete(orderDetail);
     }
+
+    public float sumOrder() {
+        return this.orderDetailRepository.sumOrder();
+    }
 }
